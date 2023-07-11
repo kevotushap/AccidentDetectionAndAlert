@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/serviceActivate"
+        android:title="Service Acti"/>
+
+    <item android:id="@+id/serviceStop"
+        android:title="Service Stop"/>
+
+    <item android:id="@+id/settings"
+        android:title="Settings"/>
+
+    <item android:id="@+id/exit"
+        android:title="exit"/>
+
+
+</menu>

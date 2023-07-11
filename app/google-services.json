@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "239411016445",
+    "project_id": "accidentdetectionandaler-ebb77",
+    "storage_bucket": "accidentdetectionandaler-ebb77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:239411016445:android:9514215ce309912b0dc494",
+        "android_client_info": {
+          "package_name": "com.example.accidentdetectionandalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "239411016445-bra2g999229hg8fipc84ib5vb8tgvpbq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUtk0Wu3fFdkQyl8EtQUZsQEwe7A2VKCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "239411016445-bra2g999229hg8fipc84ib5vb8tgvpbq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
