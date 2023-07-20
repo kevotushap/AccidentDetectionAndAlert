@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/serviceActivate"
-        android:title="Service Acti"/>
+        android:title="Service Activate"/>
 
     <item android:id="@+id/serviceStop"
         android:title="Service Stop"/>
@@ -11,7 +11,7 @@
         android:title="Settings"/>
 
     <item android:id="@+id/exit"
-        android:title="exit"/>
+        android:title="Exit"/>
 
 
 </menu>

@@ -9,5 +9,14 @@
     <string name="drawerClose">drawerClose</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="enter_emergency_contact_number">ENTER EMERGENCY CONTACT NUMBER</string>
+    <string name="contact_number_1">Contact Number 1</string>
+    <string name="contact_number_2">Contact Number 2</string>
+    <string name="contact_number_3">Contact Number 3</string>
+    <string name="enter_blood_group">Enter Blood Group</string>
+    <string name="save">SAVE</string>
+    <string name="load">LOAD</string>
+    <string name="sending_sms_to_the_emergency_contact">SENDING SMS TO THE EMERGENCY CONTACT</string>
+    <string name="abort">ABORT</string>
 
 </resources>

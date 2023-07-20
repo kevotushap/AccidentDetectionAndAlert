@@ -1,23 +1,23 @@
 package com.example.accidentdetectionandalert;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.os.Build;
-import android.os.IBinder;
-import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.app.Notification;
+        import android.app.NotificationChannel;
+        import android.app.NotificationManager;
+        import android.app.PendingIntent;
+        import android.app.Service;
+        import android.content.Intent;
+        import android.hardware.Sensor;
+        import android.hardware.SensorEvent;
+        import android.hardware.SensorEventListener;
+        import android.hardware.SensorManager;
+        import android.os.Build;
+        import android.os.IBinder;
+        import android.util.Log;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
+        import androidx.annotation.Nullable;
+        import androidx.core.app.NotificationCompat;
 
 public class AccelerometerService extends Service implements SensorEventListener {
 
@@ -84,7 +84,7 @@ public class AccelerometerService extends Service implements SensorEventListener
         PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
         Notification notification = new NotificationCompat.Builder(this, "channelId1")
 
-                .setContentTitle("Accident Detection")
+                .setContentTitle("Accident Detection And Alert")
                 .setContentText("Accelerometer Service is Running")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentIntent(pi).build();
