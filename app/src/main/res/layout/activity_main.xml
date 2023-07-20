@@ -9,6 +9,14 @@ tools:openDrawer="start"
 android:id="@+id/drawer"
 tools:context=".MainActivity">
 
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
     <TextView
         android:layout_width="320dp"
         android:layout_height="50dp"
@@ -106,19 +114,12 @@ tools:context=".MainActivity">
         app:layout_constraintTop_toBottomOf="@+id/bloodgroup"
         app:layout_constraintVertical_bias="0.236" />
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Contact info"
-        android:layout_centerInParent="true" />
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/load"
+        android:padding="16dp" />
 
 </RelativeLayout>
 
