@@ -115,15 +115,13 @@ tools:context=".MainActivity">
         app:layout_constraintVertical_bias="0.236" />
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
+        android:id="@+id/chart1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/load"
-        android:padding="16dp" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
 
-<com.google.android.material.navigation.NavigationView
+    <com.google.android.material.navigation.NavigationView
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:id="@+id/nav_view"
