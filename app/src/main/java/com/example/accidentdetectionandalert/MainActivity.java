@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     EditText txt1, txt2, txt3, txtO;
     TextView contactTextView;
     Button btsave, btlod, bton;
-    double latitude,longitude;
+    double latitude, longitude;
     LocationFinder finder;
 
     NavigationView navigationView;
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer);
 
         //adding customised toolbar
-       toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
         //toggle button
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                      case R.id.serviceActivate:
+                    case R.id.serviceActivate:
                         Intent i = new Intent(getApplicationContext(), AccelerometerService.class);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             startForegroundService(i);
@@ -176,4 +176,82 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_linechart);
+
+        setTitle("LineChartActivity1");
+
+        // ... Rest of the chart initialization code
+        lineChart = findViewById(R.id.line_chart);
+        values = new ArrayList<>();
+        lineDataSet = new LineDataSet(values, "Accelerometer Data");
+        lineData = new LineData(lineDataSet);
+        lineChart.setData(lineData);
+
+
+        // Initialize the accelerometer service
+        accelerometerService = new AccelerometerService();
+        accelerometerService.setOnAccelerometerChangeListener(new AccelerometerService.OnAccelerometerChangeListener() {
+            @Override
+            public void onAccelerometerChange(float acceleration) {
+                updateLineChartWithAccelerometerData(acceleration);
+            }
+        });
+
+        // Start the accelerometer service
+        startService(new Intent(this, AccelerometerService.class));
+    }
+
+    private void updateLineChartWithAccelerometerData(float acceleration) {
+        LineData data = chart.getData();
+        ILineDataSet dataSet = data.getDataSetByIndex(0);
+
+        if (dataSet == null) {
+            dataSet = createSet();
+            data.addDataSet(dataSet);
+        }
+
+        // Add new data entry with the current timestamp and accelerometer value
+        long timestamp = System.currentTimeMillis();
+        data.addEntry(new Entry(timestamp, acceleration), 0);
+
+        // Limit the number of visible entries to 50 (adjust as needed)
+        int visibleRange = 50;
+        if (data.getEntryCount() > visibleRange) {
+            data.removeEntry(0);
+        }
+
+        // Notify the chart that the data has changed
+        data.notifyDataChanged();
+
+        // Move the chart view to the latest entry
+        chart.moveViewToX(timestamp);
+
+        // Refresh the chart
+        chart.notifyDataSetChanged();
+        chart.invalidate();
+    }
+
+    private LineDataSet createSet() {
+        LineDataSet set = new LineDataSet(null, "Accelerometer Data");
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setColor(ColorTemplate.getHoloBlue());
+        set.setCircleColor(Color.WHITE);
+        set.setLineWidth(2f);
+        set.setCircleRadius(4f);
+        set.setFillAlpha(65);
+        set.setFillColor(ColorTemplate.getHoloBlue());
+        set.setHighLightColor(Color.rgb(244, 117, 117));
+        set.setValueTextColor(Color.WHITE);
+        set.setValueTextSize(9f);
+        set.setDrawValues(false);
+        return set;
+    }
 }
+
+// ... Rest of the code (onOptionsItemSelected, saveToGallery, etc.)
