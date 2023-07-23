@@ -10,14 +10,17 @@ android:id="@+id/drawer"
 tools:context=".MainActivity">
 
 <RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:ignore="ExtraText">
+    android:background="@color/light_gray">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
     <TextView
+        android:id="@+id/contact"
         android:layout_width="320dp"
         android:layout_height="50dp"
         android:text="@string/enter_emergency_contact_number"
@@ -50,7 +53,7 @@ tools:context=".MainActivity">
         android:id="@+id/num2"
         android:layout_width="306dp"
         android:layout_height="60dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="120dp"
         android:ems="10"
         android:hint="@string/contact_number_2"
         android:textColor="@color/black"
@@ -64,9 +67,8 @@ tools:context=".MainActivity">
         android:id="@+id/num3"
         android:layout_width="306dp"
         android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="160dp"
+        android:ems="10"
         android:hint="@string/contact_number_3"
         android:textColor="@color/black"
         android:inputType="phone"
@@ -81,7 +83,7 @@ tools:context=".MainActivity">
         android:layout_height="49dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="200dp"
         android:hint="@string/enter_blood_group"
         android:textColor="@color/black"
         android:inputType="textPersonName"
@@ -95,8 +97,11 @@ tools:context=".MainActivity">
         android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="52dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginBottom="289dp"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,22 +110,24 @@ tools:context=".MainActivity">
 
     <Button
         android:id="@+id/load"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_width="74dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="240dp"
         android:layout_marginEnd="144dp"
         android:text="@string/load"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.090"
         app:layout_constraintStart_toEndOf="@+id/save"
         app:layout_constraintTop_toBottomOf="@+id/bloodgroup"
         app:layout_constraintVertical_bias="0.236" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="373dp"
+        android:layout_height="37dp">
+
+    </com.github.mikephil.charting.charts.LineChart>
 
 </RelativeLayout>
 
