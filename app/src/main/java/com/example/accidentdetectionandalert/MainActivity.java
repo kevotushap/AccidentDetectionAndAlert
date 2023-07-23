@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer);
 
         //adding customised toolbar
-        toolbar = findViewById(R.id.toolbar);
+       toolbar = findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
 
         //toggle button
