@@ -30,10 +30,10 @@ import java.util.Map;
 public class RegistrationActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private EditText firstNameEditText, lastNameEditText, emailEditText, passwordEditText;
-    private TextView loginscrnTextView,lnkLoginTextView;
+    private TextView registerscrnTextView,lnkLoginTextView;
     private Button   btnLogin;
     private FirebaseAuth fAuth;
-    private ProgressBar progressBar;
+     private ProgressBar progressBar;
     private FirebaseFirestore fStore;
     private String userID;
 
@@ -43,7 +43,7 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
 
-        loginscrnTextView = findViewById(R.id.loginscrnA);
+        registerscrnTextView = findViewById(R.id.registerscrn);
         firstNameEditText = findViewById(R.id.first_name_edit_textA);
         lastNameEditText = findViewById(R.id.last_name_edit_textA);
         emailEditText = findViewById(R.id.email_edit_textA);

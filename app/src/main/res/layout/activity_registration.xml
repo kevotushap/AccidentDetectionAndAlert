@@ -8,7 +8,7 @@
     tools:context=".RegistrationActivity">
 
     <TextView
-        android:id="@+id/loginscrnA"
+        android:id="@+id/registerscrn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -33,7 +33,7 @@
         android:textColor="#000000"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginscrnA" />
+        app:layout_constraintTop_toBottomOf="@+id/registerscrn" />
 
     <EditText
         android:id="@+id/first_name_edit_textA"
@@ -73,7 +73,6 @@
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textSize="14sp"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/first_name_edit_textA"

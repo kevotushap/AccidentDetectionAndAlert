@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     String firstNum, bloodGrp, secondNum, thirdNum;
     public static String no1, no2, no3, bgrp;
     EditText txt1, txt2, txt3, txtO;
+    TextView contactTextView;
     Button btsave, btlod, bton;
     double latitude,longitude;
     LocationFinder finder;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        contactTextView = findViewById(R.id.contact);
         txt1 = findViewById(R.id.num1);
         txt2 = findViewById(R.id.num2);
         txt3 = findViewById(R.id.num3);
@@ -130,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
         //adding customised toolbar
         toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         //toggle button
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);

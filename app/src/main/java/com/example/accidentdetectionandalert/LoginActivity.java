@@ -89,14 +89,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(),RegistrationActivity.class));
             }
         });
+
+
 
         forgotTextLink.setOnClickListener(new View.OnClickListener() {
             @Override
