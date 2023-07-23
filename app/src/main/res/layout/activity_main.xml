@@ -18,10 +18,8 @@ tools:context=".MainActivity">
         layout="@layout/toolbar" />
 
     <TextView
-        android:id="@+id/contact"
         android:layout_width="320dp"
         android:layout_height="50dp"
-        android:layout_marginTop="60dp"
         android:text="@string/enter_emergency_contact_number"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -30,16 +28,16 @@ tools:context=".MainActivity">
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.175"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.14"
-        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteY="16dp"
+        tools:ignore="MissingConstraints"
         />
 
     <EditText
         android:id="@+id/num1"
         android:layout_width="306dp"
         android:layout_height="60dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="60dp"
+        android:ems="10"
         android:hint="@string/contact_number_1"
         android:textColor="@color/black"
         android:inputType="phone"
