@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //adding customised toolbar
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Save Drive");
-        toolbar.setBackgroundColor(getColor(R.color.black));
+        toolbar.setBackgroundColor(getColor(R.color.purple_700));
         //setSupportActionBar(toolbar);
 
         //toggle button
