@@ -29,7 +29,7 @@ tools:context=".MainActivity">
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="70dp"
         android:layout_centerHorizontal="true"/>
 
     <EditText
@@ -37,7 +37,7 @@ tools:context=".MainActivity">
         android:layout_width="306dp"
         android:layout_height="60dp"
         android:layout_below="@+id/contact"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/contact_number_1"
         android:textColor="@color/black"
@@ -61,7 +61,7 @@ tools:context=".MainActivity">
         android:layout_width="306dp"
         android:layout_height="60dp"
         android:layout_below="@+id/num2"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/contact_number_3"
         android:textColor="@color/black"
