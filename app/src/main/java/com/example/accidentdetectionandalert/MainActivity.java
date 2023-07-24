@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-    // LineChart variables  to draw chart
+    // LineChart variables
     LineChart lineChart;
     ArrayList<Entry> values;
     ILineDataSet lineDataSet;
@@ -260,6 +260,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         long timestamp = System.currentTimeMillis();
         data.addEntry(new Entry(dataSet.getEntryCount(), acceleration), 0);
 
+        // Limit the number of visible entries to 50 (adjust as needed)
+      /*  int visibleRange = 1000;
+        int entryCount = dataSet.getEntryCount();
+        if (entryCount > visibleRange) {
+            dataSet.removeEntry(0); // Remove the oldest entry from the dataset
+            for (int i = 0; i < entryCount; i++) {
+                Entry entry = dataSet.getEntryForIndex(i);
+                entry.setX(entry.getX() - 1); // Shift the x-values to the left
+            }
+        }*/
+
         // Notify the chart that the data has changed
         data.notifyDataChanged();
 
@@ -270,7 +281,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.notifyDataSetChanged();
         lineChart.invalidate();
     }
-
 
     private LineDataSet createSet() {
         LineDataSet set = new LineDataSet(null, "Accelerometer Data");
