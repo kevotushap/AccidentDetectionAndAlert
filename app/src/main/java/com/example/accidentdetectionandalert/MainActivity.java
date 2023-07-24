@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-    // LineChart variables
+    // LineChart variables  to draw chart
     LineChart lineChart;
     ArrayList<Entry> values;
     ILineDataSet lineDataSet;
