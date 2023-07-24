@@ -25,7 +25,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.components.YAxis.AxisDependency;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -260,17 +260,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         long timestamp = System.currentTimeMillis();
         data.addEntry(new Entry(dataSet.getEntryCount(), acceleration), 0);
 
-        // Limit the number of visible entries to 50 (adjust as needed)
-        int visibleRange = 50;
-        int entryCount = dataSet.getEntryCount();
-        if (entryCount > visibleRange) {
-            dataSet.removeEntry(0); // Remove the oldest entry from the dataset
-            for (int i = 0; i < entryCount; i++) {
-                Entry entry = dataSet.getEntryForIndex(i);
-                entry.setX(entry.getX() - 1); // Shift the x-values to the left
-            }
-        }
-
         // Notify the chart that the data has changed
         data.notifyDataChanged();
 
@@ -282,9 +271,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.invalidate();
     }
 
+
     private LineDataSet createSet() {
         LineDataSet set = new LineDataSet(null, "Accelerometer Data");
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setAxisDependency(AxisDependency.LEFT);
         set.setColor(Color.BLUE);
         set.setCircleColor(Color.WHITE);
         set.setLineWidth(2f);
