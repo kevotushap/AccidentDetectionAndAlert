@@ -49,7 +49,7 @@ tools:context=".MainActivity">
         android:layout_width="306dp"
         android:layout_height="60dp"
         android:layout_below="@+id/num1"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/contact_number_2"
         android:textColor="@color/black"
@@ -88,9 +88,9 @@ tools:context=".MainActivity">
         android:layout_height="wrap_content"
         android:layout_below="@+id/bloodgroup"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginStart="60dp"
         android:text="@string/save"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="false" />
 
     <Button
         android:id="@+id/load"
@@ -98,7 +98,7 @@ tools:context=".MainActivity">
         android:layout_height="wrap_content"
         android:layout_below="@+id/bloodgroup"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginLeft="40dp"
         android:layout_toEndOf="@+id/save"
         android:text="@string/load" />
 
