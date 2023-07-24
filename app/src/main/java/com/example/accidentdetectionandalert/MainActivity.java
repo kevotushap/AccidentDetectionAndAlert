@@ -226,16 +226,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Not used in this example
-    }
-
-    // Update the acceleration value when the sensor data changes
+    public void onSensorChanged(SensorEvent event) {
+        // Update the acceleration value when the sensor data changes
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float x = event.values[0];
             float y = event.values[1];
@@ -247,6 +239,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             // Update the LineChart with the new acceleration value
             updateLineChartWithAccelerometerData(acceleration);
         }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Not used in this example
+    }
+
 
     private void updateLineChartWithAccelerometerData(float acceleration) {
         LineData data = lineChart.getData();
