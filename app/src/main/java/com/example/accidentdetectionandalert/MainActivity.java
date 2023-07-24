@@ -1,5 +1,6 @@
 package com.example.accidentdetectionandalert;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -39,7 +41,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements onAccuracyChanged {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
     public static final String FILE_NAME = "example.txt";
     String filepath;
     String firstNum, bloodGrp, secondNum, thirdNum;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements onAccuracyChanged
     LineData lineData;
     int xValue = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,8 +198,14 @@ public class MainActivity extends AppCompatActivity implements onAccuracyChanged
         lineChart.setData(lineData);
 
         // Initialize sensor variables
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        // Register the sensor listener
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        // Start the accelerometer service
+        startService(new Intent(this, AccelerometerService.class));
     }
 
     @Override
@@ -217,8 +226,16 @@ public class MainActivity extends AppCompatActivity implements onAccuracyChanged
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        // Update the acceleration value when the sensor data changes
+    public void onSensorChanged(SensorEvent sensorEvent) {
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Not used in this example
+    }
+
+    // Update the acceleration value when the sensor data changes
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             float x = event.values[0];
             float y = event.values[1];
@@ -230,12 +247,6 @@ public class MainActivity extends AppCompatActivity implements onAccuracyChanged
             // Update the LineChart with the new acceleration value
             updateLineChartWithAccelerometerData(acceleration);
         }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Not used in this example
-    }
 
     private void updateLineChartWithAccelerometerData(float acceleration) {
         LineData data = lineChart.getData();
@@ -252,11 +263,11 @@ public class MainActivity extends AppCompatActivity implements onAccuracyChanged
 
         // Limit the number of visible entries to 50 (adjust as needed)
         int visibleRange = 50;
-        int entryCount = data.getEntryCount();
+        int entryCount = dataSet.getEntryCount();
         if (entryCount > visibleRange) {
-            data.removeEntry(dataSet.getEntryForIndex(0)); // Remove the oldest entry
+            dataSet.removeEntry(0); // Remove the oldest entry from the dataset
             for (int i = 0; i < entryCount; i++) {
-                Entry entry = data.getEntryByIndex(i);
+                Entry entry = dataSet.getEntryForIndex(i);
                 entry.setX(entry.getX() - 1); // Shift the x-values to the left
             }
         }
@@ -265,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements onAccuracyChanged
         data.notifyDataChanged();
 
         // Move the chart view to the latest entry
-        lineChart.moveViewToX(data.getEntryCount() - 1);
+        lineChart.moveViewToX(dataSet.getEntryCount() - 1);
 
         // Refresh the chart
         lineChart.notifyDataSetChanged();
@@ -275,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements onAccuracyChanged
     private LineDataSet createSet() {
         LineDataSet set = new LineDataSet(null, "Accelerometer Data");
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(ColorTemplate.getHoloBlue());
+        set.setColor(Color.BLUE);
         set.setCircleColor(Color.WHITE);
         set.setLineWidth(2f);
         set.setCircleRadius(4f);
