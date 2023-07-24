@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
-    private TextView loginscrnTextView, registerTextView, forgotTextLink;
+    private TextView loginscrnTextView, registerTextView,Regttv, forgotTextLink;
     private ProgressBar progressBar;
     private FirebaseAuth fAuth;
     Class<LoginActivity> context;
@@ -40,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.email_edit_text);
         passwordEditText = findViewById(R.id.password_edit_text);
         loginButton = findViewById(R.id.login_button);
-        registerTextView = findViewById(R.id.register_text_view);
+        registerTextView = findViewById(R.id.regtv);
+        Regttv= findViewById(R.id.ttv);
         progressBar = findViewById(R.id.progressBar);
         fAuth = FirebaseAuth.getInstance();
         forgotTextLink = findViewById(R.id.forgotPassword);
@@ -92,11 +93,19 @@ public class LoginActivity extends AppCompatActivity {
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+                Intent intent;
+                intent = new Intent(getApplicationContext(), RegistrationActivity.class);
                 startActivity(intent);
             }
         });
 
+        Regttv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         forgotTextLink.setOnClickListener(new View.OnClickListener() {
             @Override
