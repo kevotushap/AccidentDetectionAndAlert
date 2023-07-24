@@ -1,7 +1,10 @@
 package com.example.accidentdetectionandalert;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,14 +21,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedReader;
@@ -36,7 +39,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements onAccuracyChanged {
     public static final String FILE_NAME = "example.txt";
     String filepath;
     String firstNum, bloodGrp, secondNum, thirdNum;
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     // LineChart variables
     LineChart lineChart;
     ArrayList<Entry> values;
-    LineDataSet lineDataSet;
+    ILineDataSet lineDataSet;
     LineData lineData;
     int xValue = 0;
 
@@ -184,24 +187,54 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    //LineChart initialization and accelerometer service start
-    lineChart = findViewById(R.id.line_chart);
-    values = new ArrayList<>();
-    lineDataSet = new LineDataSet(values, "Accelerometer Data");
-    lineData = new LineData(lineDataSet);
+        // LineChart initialization
+        lineChart = findViewById(R.id.line_chart);
+        values = new ArrayList<>();
+        lineDataSet = new LineDataSet(values, "Accelerometer Data");
+        lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
 
-    // Initialize the accelerometer service
-    AccelerometerService accelerometerService = new AccelerometerService();
-        accelerometerService.setOnAccelerometerChangeListener(new AccelerometerService.OnAccelerometerChangeListener() {
-        @Override
-        public void onAccelerometerChange(float acceleration) {
-            updateLineChartWithAccelerometerData(acceleration);
-        }
-    });
+        // Initialize sensor variables
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Register the sensor listener
+        sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Start the accelerometer service
         startService(new Intent(this, AccelerometerService.class));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister the sensor listener to save battery
+        sensorManager.unregisterListener((SensorEventListener) this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        // Update the acceleration value when the sensor data changes
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            // Calculate the overall acceleration
+            acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+
+            // Update the LineChart with the new acceleration value
+            updateLineChartWithAccelerometerData(acceleration);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Not used in this example
     }
 
     private void updateLineChartWithAccelerometerData(float acceleration) {
@@ -215,19 +248,24 @@ public class MainActivity extends AppCompatActivity {
 
         // Add new data entry with the current timestamp and accelerometer value
         long timestamp = System.currentTimeMillis();
-        data.addEntry(new Entry(timestamp, acceleration), 0);
+        data.addEntry(new Entry(dataSet.getEntryCount(), acceleration), 0);
 
         // Limit the number of visible entries to 50 (adjust as needed)
         int visibleRange = 50;
-        if (data.getEntryCount() > visibleRange) {
-            data.removeEntry(0);
+        int entryCount = data.getEntryCount();
+        if (entryCount > visibleRange) {
+            data.removeEntry(dataSet.getEntryForIndex(0)); // Remove the oldest entry
+            for (int i = 0; i < entryCount; i++) {
+                Entry entry = data.getEntryByIndex(i);
+                entry.setX(entry.getX() - 1); // Shift the x-values to the left
+            }
         }
 
         // Notify the chart that the data has changed
         data.notifyDataChanged();
 
         // Move the chart view to the latest entry
-        lineChart.moveViewToX(timestamp);
+        lineChart.moveViewToX(data.getEntryCount() - 1);
 
         // Refresh the chart
         lineChart.notifyDataSetChanged();
@@ -250,4 +288,3 @@ public class MainActivity extends AppCompatActivity {
         return set;
     }
 }
-
