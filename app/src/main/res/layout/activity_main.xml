@@ -40,7 +40,7 @@ tools:context=".MainActivity">
         android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/contact_number_1"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:inputType="phone"
         android:layout_centerHorizontal="true" />
 
@@ -52,7 +52,7 @@ tools:context=".MainActivity">
         android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/contact_number_2"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:inputType="phone"
         android:layout_centerHorizontal="true" />
 
@@ -64,7 +64,7 @@ tools:context=".MainActivity">
         android:layout_marginTop="5dp"
         android:ems="10"
         android:hint="@string/contact_number_3"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:inputType="phone"
         android:layout_centerHorizontal="true" />
 
@@ -77,9 +77,8 @@ tools:context=".MainActivity">
         android:layout_marginStart="16dp"
         android:layout_marginEnd="12dp"
         android:hint="@string/enter_blood_group"
-        android:textColor="@color/black"
+        android:textColor="@color/Red"
         android:inputType="textPersonName"
-        android:text=""
         android:layout_centerHorizontal="true" />
 
     <Button
