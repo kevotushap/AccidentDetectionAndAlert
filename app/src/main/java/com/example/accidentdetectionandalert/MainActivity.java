@@ -1,9 +1,10 @@
 package com.example.accidentdetectionandalert;
 
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.DropBoxManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,8 +18,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.navigation.NavigationView;
@@ -41,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
     Button btsave, btlod, bton;
     double latitude, longitude;
     LocationFinder finder;
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private float acceleration;
 
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -49,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     // LineChart variables
     LineChart lineChart;
-    ArrayList<DropBoxManager.Entry> values;
+    ArrayList<Entry> values;
     LineDataSet lineDataSet;
     LineData lineData;
     int xValue = 0;
@@ -175,40 +183,29 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_linechart);
-
-        setTitle("LineChartActivity1");
-
-        // ... Rest of the chart initialization code
-        lineChart = findViewById(R.id.line_chart);
-        values = new ArrayList<>();
-        lineDataSet = new LineDataSet(values, "Accelerometer Data");
-        lineData = new LineData(lineDataSet);
+    //LineChart initialization and accelerometer service start
+    lineChart = findViewById(R.id.line_chart);
+    values = new ArrayList<>();
+    lineDataSet = new LineDataSet(values, "Accelerometer Data");
+    lineData = new LineData(lineDataSet);
         lineChart.setData(lineData);
 
-
-        // Initialize the accelerometer service
-        accelerometerService = new AccelerometerService();
+    // Initialize the accelerometer service
+    AccelerometerService accelerometerService = new AccelerometerService();
         accelerometerService.setOnAccelerometerChangeListener(new AccelerometerService.OnAccelerometerChangeListener() {
-            @Override
-            public void onAccelerometerChange(float acceleration) {
-                updateLineChartWithAccelerometerData(acceleration);
-            }
-        });
+        @Override
+        public void onAccelerometerChange(float acceleration) {
+            updateLineChartWithAccelerometerData(acceleration);
+        }
+    });
 
         // Start the accelerometer service
         startService(new Intent(this, AccelerometerService.class));
     }
 
     private void updateLineChartWithAccelerometerData(float acceleration) {
-        LineData data = chart.getData();
+        LineData data = lineChart.getData();
         ILineDataSet dataSet = data.getDataSetByIndex(0);
 
         if (dataSet == null) {
@@ -230,11 +227,11 @@ public class MainActivity extends AppCompatActivity {
         data.notifyDataChanged();
 
         // Move the chart view to the latest entry
-        chart.moveViewToX(timestamp);
+        lineChart.moveViewToX(timestamp);
 
         // Refresh the chart
-        chart.notifyDataSetChanged();
-        chart.invalidate();
+        lineChart.notifyDataSetChanged();
+        lineChart.invalidate();
     }
 
     private LineDataSet createSet() {
@@ -254,4 +251,3 @@ public class MainActivity extends AppCompatActivity {
     }
 }
 
-// ... Rest of the code (onOptionsItemSelected, saveToGallery, etc.)
