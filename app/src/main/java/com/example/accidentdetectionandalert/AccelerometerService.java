@@ -44,6 +44,10 @@ public class AccelerometerService extends Service implements SensorEventListener
     private static final int MIN_TIME_BETWEEN_SHAKES_MILLISECS = 1000;
     private long mLastShakeTime;
     private TextView counter;
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+    private float acceleration;
+
 
     // LineChart variables
     LineChart lineChart;
@@ -80,10 +84,7 @@ public class AccelerometerService extends Service implements SensorEventListener
         }
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }    /*
+ /*
     protected void onResume() {
         super.onResume();
         SM.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -95,6 +96,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     }
 
      */
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -112,27 +114,11 @@ public class AccelerometerService extends Service implements SensorEventListener
         sensorManager.unregisterListener((SensorEventListener) this);
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        // Update the acceleration value when the sensor data changes
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-
-            // Calculate the overall acceleration
-            acceleration = (float) Math.sqrt(x * x + y * y + z * z);
-
-            // Update the LineChart with the new acceleration value
-            updateLineChartWithAccelerometerData(acceleration);
-        }
-    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Not used in this example
-    }
 
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
