@@ -136,6 +136,9 @@ public class AccelerometerService extends Service implements SensorEventListener
         startForeground(1, notification);
         //notification end
 
+        // Start updating the LineChart
+        startLineChartUpdates();
+
         Toast.makeText(this, "Start Detecting", Toast.LENGTH_SHORT).show();
         SM = (SensorManager) getSystemService(SENSOR_SERVICE);
         mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -156,6 +159,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     public void onDestroy() {
         Toast.makeText(this, "Accelerometer Service Stopped", Toast.LENGTH_LONG).show();
         stopForeground(true);
+        stopLineChartUpdates();
         SM.unregisterListener(this);
         super.onDestroy();
     }
@@ -176,8 +180,7 @@ public class AccelerometerService extends Service implements SensorEventListener
         return null;
     }
 
-
-
+    private void startLineChartUpdates() {
     // LineChart initialization
     lineChart = findViewById(R.id.line_chart);
     values = new ArrayList<>();
@@ -195,8 +198,6 @@ public class AccelerometerService extends Service implements SensorEventListener
     // Start the accelerometer service
     startService(new Intent(this, AccelerometerService.class));
 }
-
-
 
     private void updateLineChartWithAccelerometerData(float acceleration) {
         LineData data = lineChart.getData();
