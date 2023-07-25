@@ -126,7 +126,7 @@ public class AccelerometerService extends Service implements SensorEventListener
         stopForeground(true);
         SM.unregisterListener(this);
         super.onDestroy();
-    } 
+    }
 
 
    /* @Override
