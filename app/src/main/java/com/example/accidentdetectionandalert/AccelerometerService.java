@@ -28,9 +28,6 @@ package com.example.accidentdetectionandalert;
         import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
         import com.github.mikephil.charting.utils.ColorTemplate;
         import com.github.mikephil.charting.charts.LineChart;
-        import com.github.mikephil.charting.data.Entry;
-        import com.github.mikephil.charting.data.LineData;
-        import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 
         import java.util.ArrayList;
@@ -48,7 +45,12 @@ public class AccelerometerService extends Service implements SensorEventListener
     private long mLastShakeTime;
     private TextView counter;
 
-
+    // LineChart variables
+    LineChart lineChart;
+    ArrayList<Entry> values;
+    ILineDataSet lineDataSet;
+    LineData lineData;
+    int xValue = 0;
 
     @Override
     public void onSensorChanged(SensorEvent event) {
