@@ -20,10 +20,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedReader;
@@ -32,7 +28,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
     public static final String FILE_NAME = "example.txt";
@@ -53,12 +48,6 @@ public class MainActivity extends AppCompatActivity{
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-    // LineChart variables
-    LineChart lineChart;
-    ArrayList<Entry> values;
-    ILineDataSet lineDataSet;
-    LineData lineData;
-    int xValue = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
