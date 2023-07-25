@@ -95,6 +95,43 @@ public class AccelerometerService extends Service implements SensorEventListener
     }
 
      */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Register the sensor listener
+        sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        // Start the accelerometer service
+        startService(new Intent(this, AccelerometerService.class));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister the sensor listener to save battery
+        sensorManager.unregisterListener((SensorEventListener) this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        // Update the acceleration value when the sensor data changes
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            // Calculate the overall acceleration
+            acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+
+            // Update the LineChart with the new acceleration value
+            updateLineChartWithAccelerometerData(acceleration);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Not used in this example
+    }
 
 
     @Override
@@ -173,43 +210,6 @@ public class AccelerometerService extends Service implements SensorEventListener
     startService(new Intent(this, AccelerometerService.class));
 }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Register the sensor listener
-        sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
-        // Start the accelerometer service
-        startService(new Intent(this, AccelerometerService.class));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Unregister the sensor listener to save battery
-        sensorManager.unregisterListener((SensorEventListener) this);
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        // Update the acceleration value when the sensor data changes
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-
-            // Calculate the overall acceleration
-            acceleration = (float) Math.sqrt(x * x + y * y + z * z);
-
-            // Update the LineChart with the new acceleration value
-            updateLineChartWithAccelerometerData(acceleration);
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Not used in this example
-    }
 
 
     private void updateLineChartWithAccelerometerData(float acceleration) {
