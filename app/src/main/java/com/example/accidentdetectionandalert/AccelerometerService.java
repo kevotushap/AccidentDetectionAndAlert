@@ -5,9 +5,7 @@ package com.example.accidentdetectionandalert;
         import android.app.NotificationManager;
         import android.app.PendingIntent;
         import android.app.Service;
-        import android.content.Context;
         import android.content.Intent;
-        import android.graphics.Color;
         import android.hardware.Sensor;
         import android.hardware.SensorEvent;
         import android.hardware.SensorEventListener;
@@ -21,17 +19,6 @@ package com.example.accidentdetectionandalert;
         import androidx.annotation.Nullable;
         import androidx.core.app.NotificationCompat;
 
-        import com.github.mikephil.charting.components.YAxis;
-        import com.github.mikephil.charting.data.Entry;
-        import com.github.mikephil.charting.data.LineData;
-        import com.github.mikephil.charting.data.LineDataSet;
-        import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-        import com.github.mikephil.charting.utils.ColorTemplate;
-        import com.github.mikephil.charting.charts.LineChart;
-
-
-        import java.util.ArrayList;
-
 public class AccelerometerService extends Service implements SensorEventListener {
 
     int count = 1;
@@ -44,37 +31,6 @@ public class AccelerometerService extends Service implements SensorEventListener
     private static final int MIN_TIME_BETWEEN_SHAKES_MILLISECS = 1000;
     private long mLastShakeTime;
     private TextView counter;
-    private SensorManager sensorManager;
-    private Sensor accelerometer;
-    private float acceleration;
-    private boolean isChartUpdating = false;
-
-    // LineChart variables
-    LineChart lineChart;
-    ArrayList<Entry> values;
-    ILineDataSet lineDataSet;
-    LineData lineData;
-    int xValue = 0;
-
-    private void startLineChartUpdates() {
-        if (!isChartUpdating) {
-            // Initialize the  LineChart and other variables
-            lineChart = new LineChart(this);
-            values = new ArrayList<>();
-            lineDataSet = createSet();
-            lineData = new LineData(lineDataSet);
-            lineChart.setData(lineData);
-
-            // Start updating the LineChart with accelerometer data
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-            isChartUpdating = true;
-        }
-    }
-    private void stopLineChartUpdates() {
-        // Stop updating the LineChart
-        sensorManager.unregisterListener(this);
-        isChartUpdating = false;
-    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
@@ -104,7 +60,10 @@ public class AccelerometerService extends Service implements SensorEventListener
         }
     }
 
- /*
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }    /*
     protected void onResume() {
         super.onResume();
         SM.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -117,28 +76,6 @@ public class AccelerometerService extends Service implements SensorEventListener
 
      */
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Register the sensor listener
-        sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
-        // Start the accelerometer service
-        startService(new Intent(this, AccelerometerService.class));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Unregister the sensor listener to save battery
-        sensorManager.unregisterListener((SensorEventListener) this);
-    }
-
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -155,9 +92,6 @@ public class AccelerometerService extends Service implements SensorEventListener
 
         startForeground(1, notification);
         //notification end
-
-        // Start updating the LineChart
-        startLineChartUpdates();
 
         Toast.makeText(this, "Start Detecting", Toast.LENGTH_SHORT).show();
         SM = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -179,7 +113,6 @@ public class AccelerometerService extends Service implements SensorEventListener
     public void onDestroy() {
         Toast.makeText(this, "Accelerometer Service Stopped", Toast.LENGTH_LONG).show();
         stopForeground(true);
-        stopLineChartUpdates();
         SM.unregisterListener(this);
         super.onDestroy();
     }
@@ -198,75 +131,5 @@ public class AccelerometerService extends Service implements SensorEventListener
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    private void startLineChartUpdates() {
-    // LineChart initialization
-    lineChart = findViewById(R.id.line_chart);
-    values = new ArrayList<>();
-    lineDataSet = new LineDataSet(values, "Accelerometer Data");
-    lineData = new LineData(lineDataSet);
-        lineChart.setData(lineData);
-
-    // Initialize sensor variables
-    sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-    accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-    // Register the sensor listener
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
-    // Start the accelerometer service
-    startService(new Intent(this, AccelerometerService.class));
-}
-
-    private void updateLineChartWithAccelerometerData(float acceleration) {
-        LineData data = lineChart.getData();
-        ILineDataSet dataSet = data.getDataSetByIndex(0);
-
-        if (dataSet == null) {
-            dataSet = createSet();
-            data.addDataSet(dataSet);
-        }
-
-        // Add new data entry with the current timestamp and accelerometer value
-        long timestamp = System.currentTimeMillis();
-        data.addEntry(new Entry(dataSet.getEntryCount(), acceleration), 0);
-
-        // Limit the number of visible entries to 50 (adjust as needed)
-       /*  int visibleRange = 1000;
-        int entryCount = dataSet.getEntryCount();
-        if (entryCount > visibleRange) {
-            dataSet.removeEntry(0); // Remove the oldest entry from the dataset
-            for (int i = 0; i < entryCount; i++) {
-                Entry entry = dataSet.getEntryForIndex(i);
-                entry.setX(entry.getX() - 1); // Shift the x-values to the left
-            }
-        }*/
-
-        // Notify the chart that the data has changed
-        data.notifyDataChanged();
-
-        // Move the chart view to the latest entry
-        lineChart.moveViewToX(dataSet.getEntryCount() - 1);
-
-        // Refresh the chart
-        lineChart.notifyDataSetChanged();
-        lineChart.invalidate();
-    }
-
-    private LineDataSet createSet() {
-        LineDataSet set = new LineDataSet(null, "Accelerometer Data");
-        set.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set.setColor(Color.BLUE);
-        set.setCircleColor(Color.WHITE);
-        set.setLineWidth(2f);
-        set.setCircleRadius(4f);
-        set.setFillAlpha(65);
-        set.setFillColor(ColorTemplate.getHoloBlue());
-        set.setHighLightColor(Color.rgb(244, 117, 117));
-        set.setValueTextColor(Color.WHITE);
-        set.setValueTextSize(9f);
-        set.setDrawValues(false);
-        return set;
     }
 }
