@@ -16,7 +16,7 @@
     <string name="enter_blood_group">Enter Blood Group</string>
     <string name="save">SAVE</string>
     <string name="load">LOAD</string>
-    <string name="sending_sms_to_the_emergency_contact">SENDING SMS TO THE EMERGENCY CONTACT</string>
-    <string name="abort">ABORT</string>
+    <string name="sending_notification_to_the_emergency_contact">SENDING NOTIFICATION TO THE EMERGENCY CONTACT</string>
+    <string name="false_alarm">False Alarm</string>
 
 </resources>
