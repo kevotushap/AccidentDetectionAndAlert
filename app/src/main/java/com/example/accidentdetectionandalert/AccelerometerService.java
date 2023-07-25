@@ -47,7 +47,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float acceleration;
-
+    private boolean isChartUpdating = false;
 
     // LineChart variables
     LineChart lineChart;
@@ -55,6 +55,26 @@ public class AccelerometerService extends Service implements SensorEventListener
     ILineDataSet lineDataSet;
     LineData lineData;
     int xValue = 0;
+
+    private void startLineChartUpdates() {
+        if (!isChartUpdating) {
+            // Initialize the  LineChart and other variables
+            lineChart = new LineChart(this);
+            values = new ArrayList<>();
+            lineDataSet = createSet();
+            lineData = new LineData(lineDataSet);
+            lineChart.setData(lineData);
+
+            // Start updating the LineChart with accelerometer data
+            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            isChartUpdating = true;
+        }
+    }
+    private void stopLineChartUpdates() {
+        // Stop updating the LineChart
+        sensorManager.unregisterListener(this);
+        isChartUpdating = false;
+    }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
