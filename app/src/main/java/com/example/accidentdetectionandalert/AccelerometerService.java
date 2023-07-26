@@ -24,8 +24,8 @@ public class AccelerometerService extends Service implements SensorEventListener
 
     int count = 1;
     private boolean init;
-    private Sensor mySensor;
-    private SensorManager SM;
+    private SensorManager sensorManager;
+    private Sensor accelerometerSensor;
     private float x1, x2, x3;
     private static final float ERROR = (float) 7.0;
     private static final float SHAKE_THRESHOLD = 10.00f; // m/S**2
@@ -33,11 +33,17 @@ public class AccelerometerService extends Service implements SensorEventListener
     private long mLastShakeTime;
     private TextView counter;
 
+    private void sendAccelerometerData(float acceleration) {
+        Intent intent = new Intent("com.example.accidentdetectionandalert.ACCELEROMETER_DATA");
+        intent.putExtra("ACCELERATION", acceleration);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-        SM = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mySensor = Sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
     @Override
@@ -110,9 +116,9 @@ public class AccelerometerService extends Service implements SensorEventListener
         //notification end
 
         Toast.makeText(this, "Start Detecting", Toast.LENGTH_SHORT).show();
-        SM = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        SM.registerListener((SensorEventListener) this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager= (SensorManager) getSystemService(SENSOR_SERVICE);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener((SensorEventListener) this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         return Service.START_STICKY;
     }
@@ -129,7 +135,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     public void onDestroy() {
         Toast.makeText(this, "Accelerometer Service Stopped", Toast.LENGTH_LONG).show();
         stopForeground(true);
-        SM.unregisterListener(this);
+        sensorManager.unregisterListener(this);
         super.onDestroy();
     }
 
