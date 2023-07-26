@@ -57,19 +57,18 @@ public class MainActivity extends AppCompatActivity {
     private Sensor accelerometer;
     private float acceleration;
 
-
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-    /* // LineChart variables
+    // LineChart variables
      LineChart lineChart;
      ArrayList<Entry> values;
      ILineDataSet lineDataSet;
      LineData lineData;
      int xValue = 0;
- */
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
