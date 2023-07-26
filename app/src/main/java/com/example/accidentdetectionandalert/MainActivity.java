@@ -1,6 +1,8 @@
 package com.example.accidentdetectionandalert;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -21,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
@@ -359,6 +362,34 @@ public class MainActivity extends AppCompatActivity {
         lineChart.invalidate();
 
         xValue++; // Increment x-axis value for the next data point
+    }
+
+    private void updateLineChartWithAccelerometerData(float xValue, float yValue, float zValue) {
+        // Update the LineChart with the accelerometer data
+        // Modify this method based on how you want to display the accelerometer data in the chart
+        // For example, you can use different data points (x, y, z) as separate lines in the chart.
+        // Here, we just update the y-value of the existing line with the xValue from the accelerometer data.
+        entries.add(new Entry(xValue, yValue)); // Add the accelerometer data to the chart
+        dataSet.notifyDataSetChanged();
+        lineChart.notifyDataSetChanged();
+        lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
+        lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+        lineChart.invalidate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Register the accelerometer receiver to receive data from AccelerometerService
+        LocalBroadcastManager.getInstance(this).registerReceiver(accelerometerReceiver,
+                new IntentFilter("ACCELEROMETER_DATA"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister the accelerometer receiver to avoid leaks
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
     }
 
     @Override
