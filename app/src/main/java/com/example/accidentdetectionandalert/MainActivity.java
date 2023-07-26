@@ -1,20 +1,19 @@
 package com.example.accidentdetectionandalert;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -25,12 +24,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.YAxis.AxisDependency;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedReader;
@@ -41,7 +39,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     public static final String FILE_NAME = "example.txt";
@@ -56,18 +54,24 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float acceleration;
+    private LineChart lineChart;
+    private LineDataSet dataSet;
+    private List<Entry> entries;
+    private int xValue = 0;
+    private Handler handler;
+    private Runnable dataRunnable;
 
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-    // LineChart variables
+    /*// LineChart variables
      LineChart lineChart;
      ArrayList<Entry> values;
      ILineDataSet lineDataSet;
      LineData lineData;
-     int xValue = 0;
+     int xValue = 0;*/
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -305,21 +309,21 @@ public class MainActivity extends AppCompatActivity {
     }
 */
 
-            // LineChart initialization
-            lineChart = findViewById(R.id.lineChart);
-            initLineChart();
+        // LineChart initialization
+        lineChart = findViewById(R.id.line_chart);
+        initLineChart();
 
-            // Simulate real-time data updates (You can replace this with actual sensor data)
-            handler = new Handler();
-            dataRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    updateData();
-                    handler.postDelayed(this, 1000); // Update chart every 1 second
-                }
-            };
-            handler.post(dataRunnable);
-        }
+        // Simulate real-time data updates (You can replace this with actual sensor data)
+        handler = new Handler();
+        dataRunnable = new Runnable() {
+            @Override
+            public void run() {
+                updateData();
+                handler.postDelayed(this, 1000); // Update chart every 1 second
+            }
+        };
+        handler.post(dataRunnable);
+    }
 
     private void initLineChart() {
         entries = new ArrayList<>();
