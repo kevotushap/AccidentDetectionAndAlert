@@ -1,6 +1,7 @@
 package com.example.accidentdetectionandalert;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
@@ -74,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
      ILineDataSet lineDataSet;
      LineData lineData;
      int xValue = 0;*/
+
+    private BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            float acceleration = intent.getFloatExtra("ACCELERATION", 0);
+            updateLineChartWithAccelerometerData(acceleration);
+        }
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -201,116 +210,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-/*
-        // LineChart initialization
-        lineChart = findViewById(R.id.line_chart);
-        values = new ArrayList<>();
-        lineDataSet = new LineDataSet(values, "Accelerometer Data");
-        lineData = new LineData(lineDataSet);
-        lineChart.setData(lineData);
-
-        // Initialize sensor variables
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-        // Register the sensor listener
-        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
-        // Start the accelerometer service
-        startService(new Intent(this, AccelerometerService.class));
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Register the sensor listener
-        sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-
-        // Start the accelerometer service
-        startService(new Intent(this, AccelerometerService.class));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Unregister the sensor listener to save battery
-        sensorManager.unregisterListener((SensorEventListener) this);
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        // Update the acceleration value when the sensor data changes
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-
-            // Calculate the overall acceleration
-            acceleration = (float) Math.sqrt(x * x + y * y + z * z);
-
-            // Update the LineChart with the new acceleration value
-            updateLineChartWithAccelerometerData(acceleration);
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Not used in this example
-    }
-
-
-    private void updateLineChartWithAccelerometerData(float acceleration) {
-        LineData data = lineChart.getData();
-        ILineDataSet dataSet = data.getDataSetByIndex(0);
-
-        if (dataSet == null) {
-            dataS et = createSet();
-            data.addDataSet(dataSet);
-        }
-
-        // Add new data entry with the current timestamp and accelerometer value
-        long timestamp = System.currentTimeMillis();
-        data.addEntry(new Entry(dataSet.getEntryCount(), acceleration), 0);
-
-        // Limit the number of visible entries to 50 (adjust as needed)
-        int visibleRange = 1000;
-        int entryCount = dataSet.getEntryCount();
-        if (entryCount > visibleRange) {
-            dataSet.removeEntry(0); // Remove the oldest entry from the dataset
-            for (int i = 0; i < entryCount; i++) {
-                Entry entry = dataSet.getEntryForIndex(i);
-                entry.setX(entry.getX() - 1); // Shift the x-values to the left
-            }
-        }
-
-        // Notify the chart that the data has changed
-        data.notifyDataChanged();
-
-        // Move the chart view to the latest entry
-        lineChart.moveViewToX(dataSet.getEntryCount() - 1);
-
-        // Refresh the chart
-        lineChart.notifyDataSetChanged();
-        lineChart.invalidate();
-    }
-
-    private LineDataSet createSet() {
-        LineDataSet set = new LineDataSet(null, "Accelerometer Data");
-        set.setAxisDependency(AxisDependency.LEFT);
-        set.setColor(Color.BLUE);
-        set.setCircleColor(Color.WHITE);
-        set.setLineWidth(2f);
-        set.setCircleRadius(4f);
-        set.setFillAlpha(65);
-        set.setFillColor(ColorTemplate.getHoloBlue());
-        set.setHighLightColor(Color.rgb(244, 117, 117));
-        set.setValueTextColor(Color.WHITE);
-        set.setValueTextSize(9f);
-        set.setDrawValues(false);
-        return set;
-    }
-*/
-
         // LineChart initialization
         lineChart = findViewById(R.id.line_chart);
         initLineChart();
@@ -326,6 +225,22 @@ public class MainActivity extends AppCompatActivity {
         };
         handler.post(dataRunnable);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Register the accelerometer receiver to receive data from AccelerometerService
+        LocalBroadcastManager.getInstance(this).registerReceiver(accelerometerReceiver,
+                new IntentFilter("ACCELEROMETER_DATA"));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister the accelerometer receiver to avoid leaks
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
+    }
+
 
     private void initLineChart() {
         entries = new ArrayList<>();
@@ -348,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
         lineChart.invalidate();
     }
 
+    private int dataPointsCount = 0;
+
     private void updateData() {
         // Generate random y-values for the chart (You can replace this with actual sensor data)
         Random random = new Random();
@@ -364,37 +281,40 @@ public class MainActivity extends AppCompatActivity {
         xValue++; // Increment x-axis value for the next data point
     }
 
-    private void updateLineChartWithAccelerometerData(float xValue, float yValue, float zValue) {
-        // Update the LineChart with the accelerometer data
-        // Modify this method based on how you want to display the accelerometer data in the chart
-        // For example, you can use different data points (x, y, z) as separate lines in the chart.
-        // Here, we just update the y-value of the existing line with the xValue from the accelerometer data.
-        entries.add(new Entry(xValue, yValue)); // Add the accelerometer data to the chart
+    // Register accelerometer receiver
+    private void registerAccelerometerReceiver() {
+        accelerometerReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                float acceleration = intent.getFloatExtra("ACCELERATION", 0);
+                updateLineChartWithAccelerometerData(acceleration);
+            }
+        };
+
+        IntentFilter filter = new IntentFilter("com.example.accidentdetectionandalert.ACCELEROMETER_DATA");
+        registerReceiver(accelerometerReceiver, filter);
+    }
+
+    // Update LineChart with accelerometer data
+    private void updateLineChartWithAccelerometerData(float acceleration) {
+        entries.add(new Entry(entries.size(), acceleration));
         dataSet.notifyDataSetChanged();
         lineChart.notifyDataSetChanged();
         lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-        lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+        lineChart.moveViewToX(entries.size() + 1); // Move the chart view to the latest entry
         lineChart.invalidate();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // Register the accelerometer receiver to receive data from AccelerometerService
-        LocalBroadcastManager.getInstance(this).registerReceiver(accelerometerReceiver,
-                new IntentFilter("ACCELEROMETER_DATA"));
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(accelerometerReceiver); // Unregister the accelerometer receiver
     }
+}
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Unregister the accelerometer receiver to avoid leaks
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
-    }
-
-    @Override
+  /*  @Override
     protected void onDestroy() {
         handler.removeCallbacks(dataRunnable); // Stop the data updates when the Activity is destroyed
         super.onDestroy();
     }
-}
+}*/
