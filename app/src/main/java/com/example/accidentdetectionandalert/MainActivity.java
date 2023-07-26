@@ -56,25 +56,20 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float acceleration;
-    private LineChart lineChart;
-    private LineDataSet dataSet;
-    private List<Entry> entries;
-    private int xValue = 0;
-    private Handler handler;
-    private Runnable dataRunnable;
+
 
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-   /* // LineChart variables
-    LineChart lineChart;
-    ArrayList<Entry> values;
-    ILineDataSet lineDataSet;
-    LineData lineData;
-    int xValue = 0;
-*/
+    /* // LineChart variables
+     LineChart lineChart;
+     ArrayList<Entry> values;
+     ILineDataSet lineDataSet;
+     LineData lineData;
+     int xValue = 0;
+ */
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+/*
         // LineChart initialization
         lineChart = findViewById(R.id.line_chart);
         values = new ArrayList<>();
@@ -262,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
         ILineDataSet dataSet = data.getDataSetByIndex(0);
 
         if (dataSet == null) {
-            dataSet = createSet();
+            dataS et = createSet();
             data.addDataSet(dataSet);
         }
 
@@ -271,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
         data.addEntry(new Entry(dataSet.getEntryCount(), acceleration), 0);
 
         // Limit the number of visible entries to 50 (adjust as needed)
-      /*  int visibleRange = 1000;
+        int visibleRange = 1000;
         int entryCount = dataSet.getEntryCount();
         if (entryCount > visibleRange) {
             dataSet.removeEntry(0); // Remove the oldest entry from the dataset
@@ -279,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                 Entry entry = dataSet.getEntryForIndex(i);
                 entry.setX(entry.getX() - 1); // Shift the x-values to the left
             }
-        }*/
+        }
 
         // Notify the chart that the data has changed
         data.notifyDataChanged();
@@ -307,26 +304,23 @@ public class MainActivity extends AppCompatActivity {
         set.setDrawValues(false);
         return set;
     }
+*/
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+            // LineChart initialization
+            lineChart = findViewById(R.id.lineChart);
+            initLineChart();
 
-        lineChart = findViewById(R.id.lineChart);
-        initLineChart();
-
-        // Simulate real-time data updates (You can replace this with actual sensor data)
-        handler = new Handler();
-        dataRunnable = new Runnable() {
-            @Override
-            public void run() {
-                updateData();
-                handler.postDelayed(this, 1000); // Update chart every 1 second
-            }
-        };
-        handler.post(dataRunnable);
-    }
+            // Simulate real-time data updates (You can replace this with actual sensor data)
+            handler = new Handler();
+            dataRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    updateData();
+                    handler.postDelayed(this, 1000); // Update chart every 1 second
+                }
+            };
+            handler.post(dataRunnable);
+        }
 
     private void initLineChart() {
         entries = new ArrayList<>();
