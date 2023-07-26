@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -367,5 +366,4 @@ public class MainActivity extends AppCompatActivity {
         handler.removeCallbacks(dataRunnable); // Stop the data updates when the Activity is destroyed
         super.onDestroy();
     }
-}
 }
