@@ -12,6 +12,7 @@
         android:layout_width="274dp"
         android:layout_height="259dp"
         android:src="@drawable/logoemergency"
+        android:contentDescription="Logo of Emergency"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="91dp"
