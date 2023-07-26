@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class AccelerometerService extends Service implements SensorEventListener {
 
@@ -35,8 +36,8 @@ public class AccelerometerService extends Service implements SensorEventListener
     @Override
     public void onCreate() {
         super.onCreate();
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mySensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        SM = (SensorManager) getSystemService(SENSOR_SERVICE);
+        mySensor = Sensor.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
     @Override
@@ -62,6 +63,14 @@ public class AccelerometerService extends Service implements SensorEventListener
                     ii.setClass(this, Abort.class);
                     ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(ii);
+
+                    // Send the accelerometer data to MainActivity using LocalBroadcastManager
+                    Intent intent = new Intent("ACCELEROMETER_DATA");
+                    intent.putExtra("xValue", x);
+                    intent.putExtra("yValue", y);
+                    intent.putExtra("zValue", z);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+
                 }
             }
         }
@@ -139,4 +148,5 @@ public class AccelerometerService extends Service implements SensorEventListener
     public IBinder onBind(Intent intent) {
         return null;
     }
+
 }
