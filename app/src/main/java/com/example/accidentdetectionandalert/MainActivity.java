@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
     public static final String FILE_NAME = "example.txt";
     String filepath;
     String firstNum, bloodGrp, secondNum, thirdNum;
@@ -69,20 +71,24 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-    /*// LineChart variables
-     LineChart lineChart;
-     ArrayList<Entry> values;
-     ILineDataSet lineDataSet;
-     LineData lineData;
-     int xValue = 0;*/
-
-    private BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
+        private BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             float acceleration = intent.getFloatExtra("ACCELERATION", 0);
             updateLineChartWithAccelerometerData(acceleration);
         }
-    };
+            private void updateLineChartWithAccelerometerData(float acceleration) {
+                // Add the new data entry to the chart
+                entries.add(new Entry(xValue, acceleration));
+                dataSet.notifyDataSetChanged();
+                lineChart.notifyDataSetChanged();
+                lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
+                lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+                lineChart.invalidate();
+
+                xValue++; // Increment x-axis value for the next data point
+            }
+        };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -209,10 +215,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         // LineChart initialization
         lineChart = findViewById(R.id.line_chart);
         initLineChart();
+
+        // Register the accelerometer sensor
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager != null) {
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            if (accelerometer != null) {
+                sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            } else {
+                // Handle the case where the accelerometer sensor is not available on the device
+                Toast.makeText(this, "Accelerometer sensor not available.", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         // Simulate real-time data updates (You can replace this with actual sensor data)
         handler = new Handler();
@@ -243,60 +260,84 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Get the accelerometer data here
-        float x = event.values[0];
-        float y = event.values[1];
-        float z = event.values[2];
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            // Get the accelerometer data here
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
 
-        // Calculate the acceleration
-        acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+            // Calculate the acceleration
+            acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
-        // Update the LineChart with accelerometer data
-        updateLineChartWithAccelerometerData(acceleration);
+            // Update the LineChart with accelerometer data
+            updateLineChartWithAccelerometerData(acceleration);
+        }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do nothing
+    }
 
-        private void initLineChart () {
-            entries = new ArrayList<>();
-            dataSet = new LineDataSet(entries, "Real-Time Data");
-            dataSet.setColor(Color.RED);
-            dataSet.setLineWidth(2f);
-            dataSet.setDrawCircles(false);
-            dataSet.setDrawValues(false);
+    private void initLineChart() {
+        entries = new ArrayList<>();
+        dataSet = new LineDataSet(entries, "Real-Time Data");
+        dataSet.setColor(Color.RED);
+        dataSet.setLineWidth(2f);
+        dataSet.setDrawCircles(false);
+        dataSet.setDrawValues(false);
 
-            LineData lineData = new LineData(dataSet);
-            lineChart.setData(lineData);
+        LineData lineData = new LineData(dataSet);
+        lineChart.setData(lineData);
 
-            // Customize the appearance of the chart
-            lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-            Description description = new Description();
-            description.setText(""); // Remove the description label
-            lineChart.setDescription(description);
-            lineChart.getLegend().setEnabled(false);
-            lineChart.setTouchEnabled(false);
-            lineChart.invalidate();
+        // Customize the appearance of the chart
+        lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        Description description = new Description();
+        description.setText(""); // Remove the description label
+        lineChart.setDescription(description);
+        lineChart.getLegend().setEnabled(false);
+        lineChart.setTouchEnabled(false);
+        lineChart.invalidate();
+    }
+
+    private void updateLineChartWithAccelerometerData(float acceleration) {
+        // Add the new data entry to the chart
+        entries.add(new Entry(xValue, acceleration));
+        dataSet.notifyDataSetChanged();
+        lineChart.notifyDataSetChanged();
+        lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
+        lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+        lineChart.invalidate();
+
+        xValue++; // Increment x-axis value for the next data point
+    }
+
+    private void updateData() {
+        // Generate random y-values for the chart (You can replace this with actual sensor data)
+        Random random = new Random();
+        float value = random.nextFloat() * 10;
+
+        // Add the new data entry to the chart
+        entries.add(new Entry(xValue, value));
+        dataSet.notifyDataSetChanged();
+        lineChart.notifyDataSetChanged();
+        lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
+        lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+        lineChart.invalidate();
+
+        xValue++; // Increment x-axis value for the next data point
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(this); // Unregister the accelerometer sensor
         }
+        handler.removeCallbacks(dataRunnable); // Stop the data updates when the Activity is destroyed
+    }
+}
 
-        private int dataPointsCount = 0;
-
-        private void updateData () {
-            // Generate random y-values for the chart (You can replace this with actual sensor data)
-            Random random = new Random();
-            float value = random.nextFloat() * 10;
-
-            // Add the new data entry to the chart
-            entries.add(new Entry(xValue, value));
-            dataSet.notifyDataSetChanged();
-            lineChart.notifyDataSetChanged();
-            lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-            lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-            lineChart.invalidate();
-
-            xValue++; // Increment x-axis value for the next data point
-        }
 
     /*// Register accelerometer receiver
     private void registerAccelerometerReceiver() {
@@ -310,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
         IntentFilter filter = new IntentFilter("com.example.accidentdetectionandalert.ACCELEROMETER_DATA");
         registerReceiver(accelerometerReceiver, filter);
-    }*/
+    }
 
         // Update LineChart with accelerometer data
         private void updateLineChartWithAccelerometerData ( float acceleration){
@@ -327,12 +368,5 @@ public class MainActivity extends AppCompatActivity {
             super.onDestroy();
             unregisterReceiver(accelerometerReceiver); // Unregister the accelerometer receiver
         }
-    }
-}
-
-  /*  @Override
-    protected void onDestroy() {
-        handler.removeCallbacks(dataRunnable); // Stop the data updates when the Activity is destroyed
-        super.onDestroy();
     }
 }*/
