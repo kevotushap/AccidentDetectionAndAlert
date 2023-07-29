@@ -26,7 +26,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     private boolean init;
     private SensorManager sensorManager;
     private Sensor accelerometerSensor;
-    private float x1, x2, x3;
+    private float x1, x2, x3, acceleration;
     private static final float ERROR = (float) 7.0;
     private static final float SHAKE_THRESHOLD = 10.00f; // m/S**2
     private static final int MIN_TIME_BETWEEN_SHAKES_MILLISECS = 1000;
@@ -139,6 +139,18 @@ public class AccelerometerService extends Service implements SensorEventListener
         super.onDestroy();
     }
 
+    private void sendDataToMainActivity() {
+        Intent intent = new Intent("ACCELEROMETER_DATA");
+        intent.putExtra("ACCELERATION", acceleration);
+        sendBroadcast(intent);
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+}
 
    /* @Override
     public boolean stopService(Intent name) {
@@ -148,11 +160,3 @@ public class AccelerometerService extends Service implements SensorEventListener
     }
 
     */
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-}
