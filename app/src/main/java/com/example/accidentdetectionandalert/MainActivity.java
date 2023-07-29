@@ -306,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         dataSet.notifyDataSetChanged();
         lineChart.notifyDataSetChanged();
         lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
+        lineChart.moveViewToX(entries.size() - 1); // Move the chart view to the latest entry
         lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
         lineChart.invalidate();
 
