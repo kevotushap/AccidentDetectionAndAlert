@@ -44,7 +44,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     public static final String FILE_NAME = "example.txt";
@@ -71,24 +70,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-        private BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
+
+    private BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             float acceleration = intent.getFloatExtra("ACCELERATION", 0);
             updateLineChartWithAccelerometerData(acceleration);
         }
-            private void updateLineChartWithAccelerometerData(float acceleration) {
-                // Add the new data entry to the chart
-                entries.add(new Entry(xValue, acceleration));
-                dataSet.notifyDataSetChanged();
-                lineChart.notifyDataSetChanged();
-                lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-                lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-                lineChart.invalidate();
-
-                xValue++; // Increment x-axis value for the next data point
-            }
-        };
+    };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -192,8 +181,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             startService(i);
                         }
                         Toast.makeText(getApplicationContext(), "Service On", Toast.LENGTH_SHORT).show();
-                        break;
-
+                        break; // Add this break statement to prevent other cases from being executed
                     case R.id.serviceStop:
                         Intent stopIntent = new Intent(getApplicationContext(), AccelerometerService.class);
                         stopService(stopIntent);
@@ -231,12 +219,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         }
 
-        // Simulate real-time data updates (You can replace this with actual sensor data)
+        // Simulate real-time data updates with actual sensor data from the accelerometer
         handler = new Handler();
         dataRunnable = new Runnable() {
             @Override
             public void run() {
-                updateData();
+                updateDataWithAccelerometer();
                 handler.postDelayed(this, 1000); // Update chart every 1 second
             }
         };
@@ -300,26 +288,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.invalidate();
     }
 
-    private void updateLineChartWithAccelerometerData(float acceleration) {
+    private void updateDataWithAccelerometer() {
+        // Get the actual accelerometer data from the sensor
+        float acceleration = this.acceleration;
+
         // Add the new data entry to the chart
         entries.add(new Entry(xValue, acceleration));
         dataSet.notifyDataSetChanged();
         lineChart.notifyDataSetChanged();
         lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-        lineChart.moveViewToX(entries.size() - 1); // Move the chart view to the latest entry
         lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
         lineChart.invalidate();
 
         xValue++; // Increment x-axis value for the next data point
     }
 
-    private void updateData() {
-        // Generate random y-values for the chart (You can replace this with actual sensor data)
-        Random random = new Random();
-        float value = random.nextFloat() * 10;
-
+    private void updateLineChartWithAccelerometerData(float acceleration) {
         // Add the new data entry to the chart
-        entries.add(new Entry(xValue, value));
+        entries.add(new Entry(xValue, acceleration));
         dataSet.notifyDataSetChanged();
         lineChart.notifyDataSetChanged();
         lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
@@ -338,7 +324,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         handler.removeCallbacks(dataRunnable); // Stop the data updates when the Activity is destroyed
     }
 }
-
 
     /*// Register accelerometer receiver
     private void registerAccelerometerReceiver() {
