@@ -75,7 +75,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public void onReceive(Context context, Intent intent) {
             float acceleration = intent.getFloatExtra("ACCELERATION", 0);
-            updateLineChartWithAccelerometerData();
+            if (lineChart.getVisibility() == View.VISIBLE) {
+                updateLineChartWithAccelerometerData(acceleration);
+            }
         }
     };
 
@@ -246,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
     }
 
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -258,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
             // Update the LineChart with accelerometer data
-            updateLineChartWithAccelerometerData();
+            updateLineChartWithAccelerometerData(acceleration);
         }
     }
 
@@ -289,9 +292,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.invalidate();
     }
 
-    private void updateLineChartWithAccelerometerData() {
+    private void updateLineChartWithAccelerometerData(float acceleration) {
         // Add the new data entry to the chart
-        entries.add(new Entry(xValue, acceleration));
+        entries.add(new Entry(xValue, this.acceleration));
         dataSet.notifyDataSetChanged();
         lineChart.notifyDataSetChanged();
         lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
@@ -306,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         dataRunnable = new Runnable() {
             @Override
             public void run() {
-                updateLineChartWithAccelerometerData();
+                updateLineChartWithAccelerometerData(acceleration);
                 handler.postDelayed(this, 1000); // Update chart every 1 second
             }
         };
