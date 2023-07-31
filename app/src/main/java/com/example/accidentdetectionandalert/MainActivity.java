@@ -12,6 +12,7 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         Intent i = new Intent(getApplicationContext(), AccelerometerService.class);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             startForegroundService(i);
-                        } else {
+
                             startService(i);
                         }
                         Toast.makeText(getApplicationContext(), "Service On", Toast.LENGTH_SHORT).show();
@@ -292,16 +293,31 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void updateLineChartWithAccelerometerData(float acceleration) {
-        // Add the new data entry to the chart
-        entries.add(new Entry(xValue, this.acceleration));
-        dataSet.notifyDataSetChanged();
-        lineChart.notifyDataSetChanged();
-        lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-        lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-        lineChart.invalidate();
+        if (entries != null && entries.size() > 0) {
+            // Add the new data entry to the chart
+            Log.d("Accelerometer", "Acceleration value: " + this.acceleration); // Log the acceleration value
+            entries.add(new Entry(xValue, this.acceleration));
+            dataSet.notifyDataSetChanged();
+            lineChart.notifyDataSetChanged();
+            lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
+            lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+            lineChart.invalidate();
 
-        xValue++; // Increment x-axis value for the next data point
+            xValue++; // Increment x-axis value for the next data point
+        } else {
+            // Initialize the entries list if it's null or empty
+            entries = new ArrayList<>();
+            entries.add(new Entry(xValue, this.acceleration));
+            dataSet.notifyDataSetChanged();
+            lineChart.notifyDataSetChanged();
+            lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
+            lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+            lineChart.invalidate();
+
+            xValue++; // Increment x-axis value for the next data point
+        }
     }
+
     private void startLineChartUpdates() {
         // Simulate real-time data updates with actual sensor data from the accelerometer
         handler = new Handler();
