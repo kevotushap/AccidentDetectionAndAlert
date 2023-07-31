@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         dataRunnable = new Runnable() {
             @Override
             public void run() {
-                updateDataWithAccelerometer();
+                updateLineChartWithAccelerometerData();
                 handler.postDelayed(this, 1000); // Update chart every 1 second
             }
         };
@@ -286,21 +286,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.getLegend().setEnabled(false);
         lineChart.setTouchEnabled(false);
         lineChart.invalidate();
-    }
-
-    private void updateDataWithAccelerometer() {
-        // Get the actual accelerometer data from the sensor
-        float acceleration = this.acceleration;
-
-        // Add the new data entry to the chart
-        entries.add(new Entry(xValue, acceleration));
-        dataSet.notifyDataSetChanged();
-        lineChart.notifyDataSetChanged();
-        lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-        lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-        lineChart.invalidate();
-
-        xValue++; // Increment x-axis value for the next data point
     }
 
     private void updateLineChartWithAccelerometerData(float acceleration) {
