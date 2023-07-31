@@ -117,11 +117,25 @@ public class AccelerometerService extends Service implements SensorEventListener
         //notification end
 
         Toast.makeText(this, "Start Detecting", Toast.LENGTH_SHORT).show();
-        sensorManager= (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener((SensorEventListener) this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         return Service.START_STICKY;
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Unregister the accelerometer sensor listener
+        if (sensorManager != null) {
+            sensorManager.unregisterListener(this);
+        }
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     private void createNotificationChannel() {
@@ -132,24 +146,10 @@ public class AccelerometerService extends Service implements SensorEventListener
         }
     }
 
-    @Override
-    public void onDestroy() {
-        Toast.makeText(this, "Accelerometer Service Stopped", Toast.LENGTH_LONG).show();
-        stopForeground(true);
-        sensorManager.unregisterListener(this);
-        super.onDestroy();
-    }
-
     private void sendDataToMainActivity() {
         Intent intent = new Intent("ACCELEROMETER_DATA");
         intent.putExtra("ACCELERATION", acceleration);
-        sendBroadcast(intent);
-    }
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }
 
