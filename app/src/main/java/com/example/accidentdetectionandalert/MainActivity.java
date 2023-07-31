@@ -308,10 +308,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // Stop the LineChart updates and AccelerometerService
+        stopLineChartUpdates();
+        stopAccelerometerService();
+
+        // Unregister the accelerometer receiver to avoid leaks
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
+
+        // Unregister the sensor listener
         if (sensorManager != null) {
-            sensorManager.unregisterListener(this); // Unregister the accelerometer sensor
+            sensorManager.unregisterListener(this);
         }
-        handler.removeCallbacks(dataRunnable); // Stop the data updates when the Activity is destroyed
     }
 }
 
