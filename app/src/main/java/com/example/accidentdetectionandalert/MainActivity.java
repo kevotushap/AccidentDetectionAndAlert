@@ -223,16 +223,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         }
 
+        // Register the accelerometer receiver to receive data from AccelerometerService
+        LocalBroadcastManager.getInstance(this).registerReceiver(accelerometerReceiver,
+                new IntentFilter("ACCELEROMETER_DATA"));
+
         // Simulate real-time data updates with actual sensor data from the accelerometer
-        handler = new Handler();
-        dataRunnable = new Runnable() {
-            @Override
-            public void run() {
-                updateLineChartWithAccelerometerData();
-                handler.postDelayed(this, 1000); // Update chart every 1 second
-            }
-        };
-        handler.post(dataRunnable);
+        startLineChartUpdates();
     }
 
     @Override
