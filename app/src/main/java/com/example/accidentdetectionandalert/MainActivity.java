@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public void onReceive(Context context, Intent intent) {
             float acceleration = intent.getFloatExtra("ACCELERATION", 0);
-            updateLineChartWithAccelerometerData(acceleration);
+            updateLineChartWithAccelerometerData();
         }
     };
 
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
             // Update the LineChart with accelerometer data
-            updateLineChartWithAccelerometerData(acceleration);
+            updateLineChartWithAccelerometerData();
         }
     }
 
@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.invalidate();
     }
 
-    private void updateLineChartWithAccelerometerData(float acceleration) {
+    private void updateLineChartWithAccelerometerData() {
         // Add the new data entry to the chart
         entries.add(new Entry(xValue, acceleration));
         dataSet.notifyDataSetChanged();
