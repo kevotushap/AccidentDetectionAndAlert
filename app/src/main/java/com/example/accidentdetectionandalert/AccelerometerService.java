@@ -60,6 +60,7 @@ public class AccelerometerService extends Service implements SensorEventListener
                         Math.pow(y, 2) +
                         Math.pow(z, 2)) - SensorManager.GRAVITY_EARTH;
                 Log.d("mySensor", "Acceleration is " + acceleration + "m/s^2");
+                sendDataToMainActivity();
 
                 if (acceleration > SHAKE_THRESHOLD) {
                     mLastShakeTime = curTime;
