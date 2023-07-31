@@ -187,11 +187,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                         // Open LineChart
                         lineChart.setVisibility(View.VISIBLE);
-
-                        // Update LineChart with accelerometer data
-                        updateLineChartWithAccelerometerData();
                         break;
-
+                        
                     case R.id.serviceStop:
                         Intent stopIntent = new Intent(getApplicationContext(), AccelerometerService.class);
                         stopService(stopIntent);
