@@ -71,14 +71,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
-
     private BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            float acceleration = intent.getFloatExtra("ACCELERATION", 0);
-            Log.d("MainActivity", "Received Acceleration Data: " + acceleration);
-
+            float receivedAcceleration = intent.getFloatExtra("ACCELERATION", 0);
             if (lineChart.getVisibility() == View.VISIBLE) {
+                acceleration = receivedAcceleration; // Update the acceleration value
                 updateLineChartWithAccelerometerData();
             }
         }
@@ -182,18 +180,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         Intent i = new Intent(getApplicationContext(), AccelerometerService.class);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             startForegroundService(i);
-
+                        } else {
                             startService(i);
                         }
                         Toast.makeText(getApplicationContext(), "Service On", Toast.LENGTH_SHORT).show();
-                       // Open LineChart
+
+                        // Open LineChart
                         lineChart.setVisibility(View.VISIBLE);
+
+                        // Update LineChart with accelerometer data
                         updateLineChartWithAccelerometerData();
                         break;
+
                     case R.id.serviceStop:
                         Intent stopIntent = new Intent(getApplicationContext(), AccelerometerService.class);
                         stopService(stopIntent);
                         Toast.makeText(getApplicationContext(), "Service Stop", Toast.LENGTH_SHORT).show();
+
                         // Hide LineChart
                         lineChart.setVisibility(View.GONE);
                         break;
@@ -296,11 +299,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.invalidate();
     }
 
-    private void updateLineChartWithAccelerometerData() {
+    public void updateLineChartWithAccelerometerData() {
         if (entries != null && entries.size() > 0) {
             // Add the new data entry to the chart
-            Log.d("Accelerometer", "Acceleration value: " + this.acceleration); // Log the acceleration value
-            entries.add(new Entry(xValue, this.acceleration));
+            Log.d("Accelerometer", "Acceleration value: " + acceleration); // Log the acceleration value
+            entries.add(new Entry(xValue, acceleration));
             dataSet.notifyDataSetChanged();
             lineChart.notifyDataSetChanged();
             lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
@@ -311,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         } else {
             // Initialize the entries list if it's null or empty
             entries = new ArrayList<>();
-            entries.add(new Entry(xValue, this.acceleration));
+            entries.add(new Entry(xValue, acceleration));
             dataSet.notifyDataSetChanged();
             lineChart.notifyDataSetChanged();
             lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
@@ -328,7 +331,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         dataRunnable = new Runnable() {
             @Override
             public void run() {
-                updateLineChartWithAccelerometerData();
+                if (lineChart.getVisibility() == View.VISIBLE) {
+                    updateLineChartWithAccelerometerData();
+                }
                 handler.postDelayed(this, 1000); // Update chart every 1 second
             }
         };
