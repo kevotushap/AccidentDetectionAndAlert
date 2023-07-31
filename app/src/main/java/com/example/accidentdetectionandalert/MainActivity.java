@@ -248,7 +248,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
     }
 
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
