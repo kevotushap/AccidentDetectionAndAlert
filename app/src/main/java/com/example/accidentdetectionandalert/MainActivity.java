@@ -181,11 +181,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             startService(i);
                         }
                         Toast.makeText(getApplicationContext(), "Service On", Toast.LENGTH_SHORT).show();
-                        break; // Add this break statement to prevent other cases from being executed
+                        // Open LineChart
+                        lineChart.setVisibility(View.VISIBLE);
+                        break;
                     case R.id.serviceStop:
                         Intent stopIntent = new Intent(getApplicationContext(), AccelerometerService.class);
                         stopService(stopIntent);
                         Toast.makeText(getApplicationContext(), "Service Stop", Toast.LENGTH_SHORT).show();
+                        // Hide LineChart
+                        lineChart.setVisibility(View.GONE);
                         break;
 
                     case R.id.settings:
@@ -285,6 +289,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.setDescription(description);
         lineChart.getLegend().setEnabled(false);
         lineChart.setTouchEnabled(false);
+        lineChart.setVisibility(View.GONE); // Initially hide the chart
         lineChart.invalidate();
     }
 
