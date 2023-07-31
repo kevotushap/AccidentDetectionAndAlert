@@ -304,6 +304,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         xValue++; // Increment x-axis value for the next data point
     }
+    private void startLineChartUpdates() {
+        // Simulate real-time data updates with actual sensor data from the accelerometer
+        handler = new Handler();
+        dataRunnable = new Runnable() {
+            @Override
+            public void run() {
+                updateLineChartWithAccelerometerData();
+                handler.postDelayed(this, 1000); // Update chart every 1 second
+            }
+        };
+        handler.post(dataRunnable);
+    }
+
+    private void stopLineChartUpdates() {
+        // Stop the data updates when the Activity is destroyed
+        if (handler != null) {
+            handler.removeCallbacks(dataRunnable);
+        }
+    }
+
+    private void startAccelerometerService() {
+        // Start the AccelerometerService
+        Intent i = new Intent(getApplicationContext(), AccelerometerService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(i);
+        } else {
+            startService(i);
+        }
+    }
+
+    private void stopAccelerometerService() {
+        // Stop the AccelerometerService
+        Intent stopIntent = new Intent(getApplicationContext(), AccelerometerService.class);
+        stopService(stopIntent);
+    }
 
     @Override
     protected void onDestroy() {
@@ -311,9 +346,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Stop the LineChart updates and AccelerometerService
         stopLineChartUpdates();
         stopAccelerometerService();
-
-        // Unregister the accelerometer receiver to avoid leaks
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
 
         // Unregister the sensor listener
         if (sensorManager != null) {
