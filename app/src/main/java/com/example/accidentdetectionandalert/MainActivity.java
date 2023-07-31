@@ -371,35 +371,3 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
     }
 }
-
-    /*// Register accelerometer receiver
-    private void registerAccelerometerReceiver() {
-        accelerometerReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                float acceleration = intent.getFloatExtra("ACCELERATION", 0);
-                updateLineChartWithAccelerometerData(acceleration);
-            }
-        };
-
-        IntentFilter filter = new IntentFilter("com.example.accidentdetectionandalert.ACCELEROMETER_DATA");
-        registerReceiver(accelerometerReceiver, filter);
-    }
-
-        // Update LineChart with accelerometer data
-        private void updateLineChartWithAccelerometerData ( float acceleration){
-            entries.add(new Entry(entries.size(), acceleration));
-            dataSet.notifyDataSetChanged();
-            lineChart.notifyDataSetChanged();
-            lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-            lineChart.moveViewToX(entries.size() - 1); // Move the chart view to the latest entry
-            lineChart.invalidate();
-        }
-
-        @Override
-        protected void onDestroy () {
-            super.onDestroy();
-            unregisterReceiver(accelerometerReceiver); // Unregister the accelerometer receiver
-        }
-    }
-}*/
