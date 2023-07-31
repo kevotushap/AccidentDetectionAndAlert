@@ -123,6 +123,7 @@ public class AccelerometerService extends Service implements SensorEventListener
 
         return Service.START_STICKY;
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -150,6 +151,7 @@ public class AccelerometerService extends Service implements SensorEventListener
         Intent intent = new Intent("ACCELEROMETER_DATA");
         intent.putExtra("ACCELERATION", acceleration);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        Log.d("AccelerometerService", "Sent Acceleration Data: " + acceleration);
     }
 }
 
