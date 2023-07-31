@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         public void onReceive(Context context, Intent intent) {
             float acceleration = intent.getFloatExtra("ACCELERATION", 0);
             if (lineChart.getVisibility() == View.VISIBLE) {
-                updateLineChartWithAccelerometerData(acceleration);
+                updateLineChartWithAccelerometerData();
             }
         }
     };
@@ -184,8 +184,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             startService(i);
                         }
                         Toast.makeText(getApplicationContext(), "Service On", Toast.LENGTH_SHORT).show();
-                        // Open LineChart
+                       // Open LineChart
                         lineChart.setVisibility(View.VISIBLE);
+                        updateLineChartWithAccelerometerData();
                         break;
                     case R.id.serviceStop:
                         Intent stopIntent = new Intent(getApplicationContext(), AccelerometerService.class);
@@ -261,7 +262,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
             // Update the LineChart with accelerometer data
-            updateLineChartWithAccelerometerData(acceleration);
+            updateLineChartWithAccelerometerData();
+
         }
     }
 
@@ -292,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.invalidate();
     }
 
-    private void updateLineChartWithAccelerometerData(float acceleration) {
+    private void updateLineChartWithAccelerometerData() {
         if (entries != null && entries.size() > 0) {
             // Add the new data entry to the chart
             Log.d("Accelerometer", "Acceleration value: " + this.acceleration); // Log the acceleration value
@@ -324,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         dataRunnable = new Runnable() {
             @Override
             public void run() {
-                updateLineChartWithAccelerometerData(acceleration);
+                updateLineChartWithAccelerometerData();
                 handler.postDelayed(this, 1000); // Update chart every 1 second
             }
         };
@@ -365,6 +367,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (sensorManager != null) {
             sensorManager.unregisterListener(this);
         }
+        // Unregister the accelerometer receiver from LocalBroadcastManager
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
     }
 }
 
