@@ -39,7 +39,7 @@ public class abort extends AppCompatActivity  {
             fis = openFileInput(MainActivity.FILE_NAME);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
-            MainActivity.(R.id.num1) = br.readLine();
+            MainActivity.no1 = br.readLine();
             MainActivity.no2 = br.readLine();
             MainActivity.no3 = br.readLine();
             MainActivity.bgrp = br.readLine();
