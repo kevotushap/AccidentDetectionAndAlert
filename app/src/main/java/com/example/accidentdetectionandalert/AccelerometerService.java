@@ -56,13 +56,15 @@ public class AccelerometerService extends Service implements SensorEventListener
                 float y = event.values[1];
                 float z = event.values[2];
 
-                double acceleration = Math.sqrt(Math.pow(x, 2) +
+                float LocalAcceleration = 0; // Initialize to a default value
+
+                LocalAcceleration = (float)(Math.sqrt(Math.pow(x, 2) +
                         Math.pow(y, 2) +
-                        Math.pow(z, 2)) - SensorManager.GRAVITY_EARTH;
-                Log.d("mySensor", "Acceleration is " + acceleration + "m/s^2");
+                        Math.pow(z, 2)) - SensorManager.GRAVITY_EARTH);
+                Log.d("mySensor", "Acceleration is " + LocalAcceleration + "m/s^2");
                 sendDataToMainActivity();
 
-                if (acceleration > SHAKE_THRESHOLD) {
+                if (LocalAcceleration > SHAKE_THRESHOLD) {
                     mLastShakeTime = curTime;
                     Toast.makeText(getApplicationContext(), "ACCIDENT DETECTED",
                             Toast.LENGTH_SHORT).show();
