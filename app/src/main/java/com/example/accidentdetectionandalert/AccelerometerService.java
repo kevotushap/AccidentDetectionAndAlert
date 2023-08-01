@@ -28,7 +28,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     private Sensor accelerometerSensor;
     private float x1, x2, x3, acceleration;
     private static final float ERROR = (float) 7.0;
-    private static final float SHAKE_THRESHOLD = 10.00f; // m/S**2
+    private static final float SHAKE_THRESHOLD = 6.00f; // m/S**2
     private static final int MIN_TIME_BETWEEN_SHAKES_MILLISECS = 1000;
     private long mLastShakeTime;
     private TextView counter;
@@ -62,6 +62,10 @@ public class AccelerometerService extends Service implements SensorEventListener
                         Math.pow(y, 2) +
                         Math.pow(z, 2)) - SensorManager.GRAVITY_EARTH);
                 Log.d("mySensor", "Acceleration is " + LocalAcceleration + "m/s^2");
+
+                // Update the acceleration variable with the local acceleration
+                acceleration = LocalAcceleration;
+
                 sendDataToMainActivity();
 
                 if (LocalAcceleration > SHAKE_THRESHOLD) {
