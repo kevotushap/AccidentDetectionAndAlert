@@ -1,9 +1,11 @@
 package com.example.accidentdetectionandalert;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -25,6 +27,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -71,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
+    private static final int PERMISSION_REQUEST_CODE = 1;
+
     private BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -82,6 +88,61 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     };
 
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Check if the required permissions are granted, and request them if not
+        if (checkPermissions()) {
+            // Permissions are already granted, continue with your app logic
+            init();
+        } else {
+            // Request permissions
+            requestPermissions();
+        }
+    }
+
+    // Check if the required permissions are granted
+    private boolean checkPermissions() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS)
+                == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED;
+    }
+
+    // Request permissions
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{
+                        Manifest.permission.BODY_SENSORS,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                },
+                PERMISSION_REQUEST_CODE);
+    }
+
+    // Handle permission request result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissions granted, continue with your app logic
+                init();
+            } else {
+                // Permissions denied, handle accordingly (e.g., show a message or exit the app)
+                Toast.makeText(this, "Permissions denied! App may not work properly.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
