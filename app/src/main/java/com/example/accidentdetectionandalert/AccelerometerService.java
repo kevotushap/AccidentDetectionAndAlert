@@ -67,7 +67,7 @@ public class AccelerometerService extends Service implements SensorEventListener
                     Toast.makeText(getApplicationContext(), "ACCIDENT DETECTED",
                             Toast.LENGTH_SHORT).show();
                     Intent ii = new Intent();
-                    ii.setClass(this, Abort.class);
+                    ii.setClass(this, abort.class);
                     ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(ii);
 
