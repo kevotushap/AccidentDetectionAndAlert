@@ -26,23 +26,6 @@
         android:theme="@style/Theme.AccidentDetectionAndAlert"
         tools:targetApi="34">
         <activity
-            android:name=".RegistrationActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-
-        <service
-            android:name=".LocationFinder"
-            android:enabled="true"
-            android:exported="true"
-            tools:ignore="Instantiatable" />
-        <service
-            android:name=".AccelerometerService"
-            android:enabled="true" />
-
-        <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -63,8 +46,21 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+            <activity android:name=".RegistrationActivity"
+                android:exported="false" />
 
         <activity android:name=".MainActivity" />
-    </application>
 
+        <activity android:name=".abort"
+            android:exported="false" />
+
+        <service
+            android:name=".LocationFinder"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="Instantiatable" />
+        <service
+            android:name=".AccelerometerService"
+            android:enabled="true" />
+    </application>
 </manifest>
