@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     // Handle permission request result
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -142,13 +143,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         }
     }
-    
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void init() {
         contactTextView = findViewById(R.id.contact);
         txt1 = findViewById(R.id.num1);
         txt2 = findViewById(R.id.num2);
