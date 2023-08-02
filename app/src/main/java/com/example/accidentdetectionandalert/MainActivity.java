@@ -36,6 +36,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -344,6 +345,27 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         dataSet.setLineWidth(2f);
         dataSet.setDrawCircles(false);
         dataSet.setDrawValues(false);
+
+        // Applying custom colors to the chart
+        lineChart.setBackgroundColor(Color.WHITE);
+        lineChart.setGridBackgroundColor(Color.LTGRAY);
+
+        // Customizing axis
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextColor(Color.BLACK);
+        xAxis.setDrawGridLines(false);
+
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setTextColor(Color.BLACK);
+        leftAxis.setDrawGridLines(true);
+
+        YAxis rightAxis = lineChart.getAxisRight();
+        rightAxis.setEnabled(false); // Disable the right Y-axis
+
+        // Enabling animations
+        lineChart.animateX(1500);
+
 
         LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
