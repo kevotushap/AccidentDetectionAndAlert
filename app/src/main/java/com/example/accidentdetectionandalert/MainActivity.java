@@ -366,25 +366,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             entries = new ArrayList<>();
         }
 
+        // Set negative acceleration values to zero
+        if (receivedAcceleration < 0) {
+            receivedAcceleration = 0;
+        }
+
         // Add the new data entry to the chart
         Log.d("Accelerometer", "Acceleration value: " + receivedAcceleration); // Log the acceleration value
         entries.add(new Entry(xValue, receivedAcceleration));
         dataSet.notifyDataSetChanged();
         lineChart.notifyDataSetChanged();
-
-        // Calculate the maximum absolute acceleration value in the current data entries
-        float maxAcceleration = 0f;
-        for (Entry entry : entries) {
-            float absAcceleration = Math.abs(entry.getY());
-            if (absAcceleration > maxAcceleration) {
-                maxAcceleration = absAcceleration;
-            }
-        }
-
-        // Update Y-axis range to accommodate both positive and negative values
-        lineChart.getAxisLeft().setAxisMinimum(-maxAcceleration);
-        lineChart.getAxisLeft().setAxisMaximum(maxAcceleration);
-
         lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
         lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
         lineChart.invalidate();
