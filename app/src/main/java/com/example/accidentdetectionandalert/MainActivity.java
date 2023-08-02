@@ -357,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.setDescription(description);
         lineChart.getLegend().setEnabled(false);
         lineChart.setTouchEnabled(false);
-        lineChart.setVisibility(View.VISIBLE);
+        lineChart.setVisibility(View.GONE);
         lineChart.invalidate();
     }
 
@@ -396,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if (lineChart.getVisibility() == View.VISIBLE) {
                     updateLineChartWithAccelerometerData(receivedAcceleration);
                 }
-                handler.postDelayed(this, 1000); // Update chart every 1 second
+                handler.postDelayed(this, 3000); // Update chart every 3 second
             }
         };
         handler.post(dataRunnable);
