@@ -39,6 +39,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -327,6 +328,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             // Calculate the acceleration
             acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
+            // Increment the xValue by the time interval (e.g., 5 seconds per update)
+            xValue +=5;
+
             // Update the LineChart with accelerometer data
             updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
 
@@ -355,6 +359,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.BLACK);
         xAxis.setDrawGridLines(false);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                // Convert the float value to time representation (e.g., 10:30 AM)
+                // You need to implement this conversion based on your time data
+                // For example: return formatTime(value);
+                return formatTime((int) value);
+            }
+        });
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setTextColor(Color.BLACK);
@@ -401,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     LineData lineData = new LineData(dataSet);
                     lineChart.setData(lineData);
                     lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-                    lineChart.setVisibleXRangeMaximum(10); // Display 100 entries at a time
+                    lineChart.setVisibleXRangeMaximum(10); // Display 10 seconds of data at a time
                     lineChart.invalidate(); // Refresh the chart
                 } else {
                     // Handle the case where the entries array is empty
@@ -420,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void run() {
                 if (lineChart.getVisibility() == View.VISIBLE) {
-                    updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
+                    updateLineChartWithAccelerometerData(acceleration, lineChart, entries, xValue);
                 }
                 handler.postDelayed(this, 3000); // Update chart every 3 seconds
             }
@@ -480,5 +493,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onNothingSelected() {
         // Handle when nothing is selected (Optional)
         // You can leave it empty or implement any specific action
+    }
+
+    private String formatTime(int value) {
+        // Implement your time formatting logic here
+        // For example: return formatted time in "HH:mm" format
+        // or any other representation that fits your use case
+        return String.format("%02d:%02d", value / 60, value % 60);
     }
 }
