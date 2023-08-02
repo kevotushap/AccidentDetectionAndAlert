@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     LineData lineData = new LineData(dataSet);
                     lineChart.setData(lineData);
                     lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-                    lineChart.setVisibleXRangeMaximum(10); // Display 10 seconds of data at a time
+                    lineChart.setVisibleXRangeMaximum(100); // Display 10 seconds of data at a time
                     lineChart.invalidate(); // Refresh the chart
                 } else {
                     // Handle the case where the entries array is empty
@@ -435,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if (lineChart.getVisibility() == View.VISIBLE) {
                     updateLineChartWithAccelerometerData(acceleration, lineChart, entries, xValue);
                 }
-                handler.postDelayed(this, 3000); // Update chart every 3 seconds
+                handler.postDelayed(this, 5000); // Update chart every 5 seconds
             }
         };
         handler.post(dataRunnable);
