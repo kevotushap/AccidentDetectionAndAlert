@@ -56,9 +56,9 @@ public class RegistrationActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressBarA);
 
-        if(fAuth.getCurrentUser() != null){
+        if (fAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
+            finish();
         }
 
 
@@ -128,7 +128,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 }
                             });
                             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
+                            finish(); // Finish the RegistrationActivity so that the user cannot navigate back to it using the back button.
                         }else {
                             Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
