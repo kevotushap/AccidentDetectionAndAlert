@@ -401,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     LineData lineData = new LineData(dataSet);
                     lineChart.setData(lineData);
                     lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-                    lineChart.setVisibleXRangeMaximum(100); // Display 100 entries at a time
+                    lineChart.setVisibleXRangeMaximum(10); // Display 100 entries at a time
                     lineChart.invalidate(); // Refresh the chart
                 } else {
                     // Handle the case where the entries array is empty
