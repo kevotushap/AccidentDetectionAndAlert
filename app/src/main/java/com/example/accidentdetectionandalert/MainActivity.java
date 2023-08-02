@@ -14,7 +14,6 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +41,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedReader;
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             float receivedAcceleration = intent.getFloatExtra("ACCELERATION", 0);
             if (lineChart.getVisibility() == View.VISIBLE) {
                 acceleration = receivedAcceleration; // Update the acceleration value
-                updateLineChartWithAccelerometerData(receivedAcceleration);
+                updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
             }
         }
     };
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
             // Update the LineChart with accelerometer data
-            updateLineChartWithAccelerometerData(receivedAcceleration);
+            updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
 
         }
     }
@@ -383,36 +383,35 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.invalidate();
     }
 
-    public void updateLineChartWithAccelerometerData(float receivedAcceleration) {
-        if (entries == null) {
-            entries = new ArrayList<>();
-        }
+    public static void updateLineChartWithAccelerometerData(final float receivedAcceleration, final LineChart lineChart, final List<Entry> entries, final int xValue) {
+        // Run on the UI thread to update the chart
+        lineChart.post(new Runnable() {
+            @Override
+            public void run() {
+                // Add the new data entry to the chart
+                entries.add(new Entry(xValue, receivedAcceleration));
 
-        // Add the new data entry to the chart
-        Log.d("Accelerometer", "Acceleration value: " + receivedAcceleration); // Log the acceleration value
-        entries.add(new Entry(xValue, receivedAcceleration));
+                // Check the size of the entries array before updating the LineChart
+                if (entries.size() > 0) {
+                    LineDataSet dataSet = new LineDataSet(entries, "Data");
+                    dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                    dataSet.setDrawCircles(false);
+                    dataSet.setDrawValues(false);
 
-        // Check the size of the entries array before updating the LineChart
-        if (entries.size() > 0) {
-            LineDataSet dataSet = new LineDataSet(entries, "Data");
-            // Apply any other customizations to the dataSet
-            // ...
-
-            LineData lineData = new LineData(dataSet);
-            lineChart.setData(lineData);
-            lineChart.setVisibleXRangeMaximum(100); // Display 100 entries at a time
-            lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-            lineChart.invalidate(); // Refresh the chart
-        } else {
-            // Handle the case where the entries array is empty
-            // You can show an error message or take appropriate action
-            // For example, you can display a toast message
-            Toast.makeText(this, "No data available for the chart", Toast.LENGTH_SHORT).show();
-        }
-
-        xValue++; // Increment x-axis value for the next data point
+                    LineData lineData = new LineData(dataSet);
+                    lineChart.setData(lineData);
+                    lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+                    lineChart.setVisibleXRangeMaximum(100); // Display 100 entries at a time
+                    lineChart.invalidate(); // Refresh the chart
+                } else {
+                    // Handle the case where the entries array is empty
+                    // You can show an error message or take appropriate action
+                    // For example, you can display a toast message
+                    Toast.makeText(lineChart.getContext(), "No data available for the chart", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
-
 
     private void startLineChartUpdates() {
         // Simulate real-time data updates with actual sensor data from the accelerometer
@@ -421,9 +420,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void run() {
                 if (lineChart.getVisibility() == View.VISIBLE) {
-                    updateLineChartWithAccelerometerData(receivedAcceleration);
+                    updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
                 }
-                handler.postDelayed(this, 3000); // Update chart every 3 second
+                handler.postDelayed(this, 3000); // Update chart every 3 seconds
             }
         };
         handler.post(dataRunnable);
