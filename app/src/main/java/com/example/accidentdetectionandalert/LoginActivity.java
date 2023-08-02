@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password_edit_text);
         loginButton = findViewById(R.id.login_button);
         registerTextView = findViewById(R.id.regtv);
-        Regttv= findViewById(R.id.ttv);
         progressBar = findViewById(R.id.progressBar);
         fAuth = FirebaseAuth.getInstance();
         forgotTextLink = findViewById(R.id.forgotPassword);
@@ -95,14 +94,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent;
                 intent = new Intent(getApplicationContext(), RegistrationActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Regttv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
                 startActivity(intent);
             }
         });
