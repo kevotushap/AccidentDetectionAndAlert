@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -46,8 +45,10 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-            <activity android:name=".RegistrationActivity"
-                android:exported="false" />
+        <activity
+            android:name=".RegistrationActivity"
+            android:label="Registration Activity"
+            android:exported="false" />
 
         <activity android:name=".MainActivity" />
 
@@ -58,7 +59,8 @@
             android:name=".LocationFinder"
             android:enabled="true"
             android:exported="true"
-            tools:ignore="Instantiatable" />
+            tools:ignore="Instantiatable"
+            android:permission="TODO" />
         <service
             android:name=".AccelerometerService"
             android:enabled="true" />
