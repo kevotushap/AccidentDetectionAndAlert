@@ -39,6 +39,8 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.BufferedReader;
@@ -50,7 +52,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity implements SensorEventListener, OnChartValueSelectedListener {
     public static final String FILE_NAME = "example.txt";
     String filepath;
     String firstNum, bloodGrp, secondNum, thirdNum;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float acceleration;
+    private final float receivedAcceleration = 0.0f; // Declare as a global variable
     private LineChart lineChart;
     private LineDataSet dataSet;
     private List<Entry> entries;
@@ -77,18 +80,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private static final int PERMISSION_REQUEST_CODE = 1;
 
-    private BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             float receivedAcceleration = intent.getFloatExtra("ACCELERATION", 0);
-
-            // Display the acceleration value in the TextView or perform any other desired actions
-            TextView accelerationTextView = findViewById(R.id.line_chart);
-            accelerationTextView.setText("Acceleration value: " + acceleration);
-            
             if (lineChart.getVisibility() == View.VISIBLE) {
                 acceleration = receivedAcceleration; // Update the acceleration value
-                updateLineChartWithAccelerometerData();
+                updateLineChartWithAccelerometerData(receivedAcceleration);
             }
         }
     };
@@ -134,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     // Handle permission request result
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
@@ -327,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
             // Update the LineChart with accelerometer data
-            updateLineChartWithAccelerometerData();
+            updateLineChartWithAccelerometerData(receivedAcceleration);
 
         }
     }
@@ -347,6 +345,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
+        // Register OnChartValueSelectedListener
+        lineChart.setOnChartValueSelectedListener(this);
 
         // Customize the appearance of the chart
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.invalidate();
     }
 
-    public void updateLineChartWithAccelerometerData() {
+    public void updateLineChartWithAccelerometerData(float receivedAcceleration) {
         if (entries != null && entries.size() > 0) {
             // Add the new data entry to the chart
             Log.d("Accelerometer", "Acceleration value: " + acceleration); // Log the acceleration value
@@ -392,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void run() {
                 if (lineChart.getVisibility() == View.VISIBLE) {
-                    updateLineChartWithAccelerometerData();
+                    updateLineChartWithAccelerometerData(receivedAcceleration);
                 }
                 handler.postDelayed(this, 1000); // Update chart every 1 second
             }
@@ -436,5 +436,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         // Unregister the accelerometer receiver from LocalBroadcastManager
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
+    }
+
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+        // Handle point click event here
+        int index = (int) e.getX(); // Get the index of the clicked point
+        float acceleration = e.getY(); // Get the y-axis value of the clicked point
+
+        String message = "Point " + index + " clicked. Acceleration: " + acceleration;
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected() {
+        // Handle when nothing is selected (Optional)
+        // You can leave it empty or implement any specific action
     }
 }
