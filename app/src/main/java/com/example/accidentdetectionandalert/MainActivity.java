@@ -372,8 +372,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         dataSet.notifyDataSetChanged();
         lineChart.notifyDataSetChanged();
 
+        // Calculate the maximum absolute acceleration value in the current data entries
+        float maxAcceleration = 0f;
+        for (Entry entry : entries) {
+            float absAcceleration = Math.abs(entry.getY());
+            if (absAcceleration > maxAcceleration) {
+                maxAcceleration = absAcceleration;
+            }
+        }
+
         // Update Y-axis range to accommodate both positive and negative values
-        float maxAcceleration = Math.max(Math.abs(dataSet.getYMin()), Math.abs(dataSet.getYMax()));
         lineChart.getAxisLeft().setAxisMinimum(-maxAcceleration);
         lineChart.getAxisLeft().setAxisMaximum(maxAcceleration);
 
@@ -383,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         xValue++; // Increment x-axis value for the next data point
     }
-
+    
     private void startLineChartUpdates() {
         // Simulate real-time data updates with actual sensor data from the accelerometer
         handler = new Handler();
