@@ -45,6 +45,12 @@ public class LoginActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         forgotTextLink = findViewById(R.id.forgotPassword);
 
+        // Automatically navigate to RegistrationActivity if there is no authenticated user
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(this, RegistrationActivity.class));
+            finish();
+        }
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
 
     }
 }
