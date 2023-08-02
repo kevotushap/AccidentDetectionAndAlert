@@ -138,16 +138,12 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
-
-
         lnkLoginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                Toast.makeText(RegistrationActivity.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
-
-
     }
 }
