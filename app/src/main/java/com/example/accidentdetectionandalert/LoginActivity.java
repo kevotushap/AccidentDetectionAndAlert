@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
-    private TextView loginscrnTextView, registerTextView,Regttv, forgotTextLink;
+    private TextView loginscrnTextView, registerTextView, forgotTextLink;
     private ProgressBar progressBar;
     private FirebaseAuth fAuth;
     Class<LoginActivity> context;
@@ -89,12 +89,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // Register TextView Click Listener
         registerTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                intent = new Intent(getApplicationContext(), RegistrationActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
                 finish();
             }
         });
