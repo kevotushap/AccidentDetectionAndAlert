@@ -396,14 +396,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Add the new data entry to the chart
         Log.d("Accelerometer", "Acceleration value: " + receivedAcceleration); // Log the acceleration value
         entries.add(new Entry(xValue, receivedAcceleration));
-        dataSet.notifyDataSetChanged();
-        lineChart.notifyDataSetChanged();
-        lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-        lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-        lineChart.invalidate();
+
+        // Check the size of the entries array before updating the LineChart
+        if (entries.size() > 0) {
+            LineDataSet dataSet = new LineDataSet(entries, "Data");
+            // Apply any other customizations to the dataSet
+            // ...
+
+            LineData lineData = new LineData(dataSet);
+            lineChart.setData(lineData);
+            lineChart.setVisibleXRangeMaximum(100); // Display 100 entries at a time
+            lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+            lineChart.invalidate(); // Refresh the chart
+        } else {
+            // Handle the case where the entries array is empty
+            // You can show an error message or take appropriate action
+            // For example, you can display a toast message
+            Toast.makeText(this, "No data available for the chart", Toast.LENGTH_SHORT).show();
+        }
 
         xValue++; // Increment x-axis value for the next data point
     }
+
 
     private void startLineChartUpdates() {
         // Simulate real-time data updates with actual sensor data from the accelerometer
