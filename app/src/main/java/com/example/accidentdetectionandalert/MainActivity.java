@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             // Request permissions
             requestPermissions();
         }
+        // Initialize the LineChart after setting the layout
+        initLineChart();
     }
 
     // Check if the required permissions are granted
