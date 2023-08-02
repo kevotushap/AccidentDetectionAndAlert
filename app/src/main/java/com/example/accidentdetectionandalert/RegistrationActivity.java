@@ -56,11 +56,11 @@ public class RegistrationActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         progressBar = findViewById(R.id.progressBarA);
 
-        if (fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        // Automatically navigate to RegistrationActivity if there is no authenticated user
+        if (fAuth.getCurrentUser() == null) {
+            startActivity(new Intent(this, RegistrationActivity.class));
             finish();
         }
-
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
