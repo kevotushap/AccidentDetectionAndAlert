@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         xValue++; // Increment x-axis value for the next data point
     }
-    
+
     private void startLineChartUpdates() {
         // Simulate real-time data updates with actual sensor data from the accelerometer
         handler = new Handler();
