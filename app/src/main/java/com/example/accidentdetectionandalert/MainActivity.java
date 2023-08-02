@@ -362,29 +362,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void updateLineChartWithAccelerometerData(float receivedAcceleration) {
-        if (entries != null && entries.size() > 0) {
-            // Add the new data entry to the chart
-            Log.d("Accelerometer", "Acceleration value: " + acceleration); // Log the acceleration value
-            entries.add(new Entry(xValue, receivedAcceleration)); // Use receivedAcceleration here
-            dataSet.notifyDataSetChanged();
-            lineChart.notifyDataSetChanged();
-            lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-            lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-            lineChart.invalidate();
-
-            xValue++; // Increment x-axis value for the next data point
-        } else {
-            // Initialize the entries list if it's null or empty
+        if (entries == null) {
             entries = new ArrayList<>();
-            entries.add(new Entry(xValue, receivedAcceleration)); // Use receivedAcceleration here
-            dataSet.notifyDataSetChanged();
-            lineChart.notifyDataSetChanged();
-            lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
-            lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-            lineChart.invalidate();
-
-            xValue++; // Increment x-axis value for the next data point
         }
+
+        // Add the new data entry to the chart
+        Log.d("Accelerometer", "Acceleration value: " + acceleration); // Log the acceleration value
+        entries.add(new Entry(xValue, receivedAcceleration));
+        dataSet.notifyDataSetChanged();
+        lineChart.notifyDataSetChanged();
+        lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
+        lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
+        lineChart.invalidate();
+
+        xValue++; // Increment x-axis value for the next data point
     }
 
     private void startLineChartUpdates() {
