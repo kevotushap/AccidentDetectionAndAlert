@@ -365,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (entries != null && entries.size() > 0) {
             // Add the new data entry to the chart
             Log.d("Accelerometer", "Acceleration value: " + acceleration); // Log the acceleration value
-            entries.add(new Entry(xValue, acceleration));
+            entries.add(new Entry(xValue, receivedAcceleration)); // Use receivedAcceleration here
             dataSet.notifyDataSetChanged();
             lineChart.notifyDataSetChanged();
             lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         } else {
             // Initialize the entries list if it's null or empty
             entries = new ArrayList<>();
-            entries.add(new Entry(xValue, acceleration));
+            entries.add(new Entry(xValue, receivedAcceleration)); // Use receivedAcceleration here
             dataSet.notifyDataSetChanged();
             lineChart.notifyDataSetChanged();
             lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
