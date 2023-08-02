@@ -388,11 +388,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             entries = new ArrayList<>();
         }
 
-        // Set negative acceleration values to zero
-        if (receivedAcceleration < 0) {
-            receivedAcceleration = 0;
-        }
-
         // Add the new data entry to the chart
         Log.d("Accelerometer", "Acceleration value: " + receivedAcceleration); // Log the acceleration value
         entries.add(new Entry(xValue, receivedAcceleration));
