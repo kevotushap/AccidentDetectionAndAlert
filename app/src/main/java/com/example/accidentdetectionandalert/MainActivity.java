@@ -81,6 +81,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         @Override
         public void onReceive(Context context, Intent intent) {
             float receivedAcceleration = intent.getFloatExtra("ACCELERATION", 0);
+
+            // Display the acceleration value in the TextView or perform any other desired actions
+            TextView accelerationTextView = findViewById(R.id.line_chart);
+            accelerationTextView.setText("Acceleration value: " + acceleration);
+            
             if (lineChart.getVisibility() == View.VISIBLE) {
                 acceleration = receivedAcceleration; // Update the acceleration value
                 updateLineChartWithAccelerometerData();
