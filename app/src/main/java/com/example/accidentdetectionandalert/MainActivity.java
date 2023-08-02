@@ -357,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         lineChart.setDescription(description);
         lineChart.getLegend().setEnabled(false);
         lineChart.setTouchEnabled(false);
-        lineChart.setVisibility(View.GONE); // Initially hide the chart
+        lineChart.setVisibility(View.VISIBLE);
         lineChart.invalidate();
     }
 
