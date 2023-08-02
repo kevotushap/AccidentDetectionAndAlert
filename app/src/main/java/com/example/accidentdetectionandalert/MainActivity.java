@@ -367,10 +367,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
         // Add the new data entry to the chart
-        Log.d("Accelerometer", "Acceleration value: " + acceleration); // Log the acceleration value
+        Log.d("Accelerometer", "Acceleration value: " + receivedAcceleration); // Log the acceleration value
         entries.add(new Entry(xValue, receivedAcceleration));
         dataSet.notifyDataSetChanged();
         lineChart.notifyDataSetChanged();
+
+        // Update Y-axis range to accommodate both positive and negative values
+        float maxAcceleration = Math.max(Math.abs(dataSet.getYMin()), Math.abs(dataSet.getYMax()));
+        lineChart.getAxisLeft().setAxisMinimum(-maxAcceleration);
+        lineChart.getAxisLeft().setAxisMaximum(maxAcceleration);
+
         lineChart.setVisibleXRangeMaximum(10); // Display 10 entries at a time
         lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
         lineChart.invalidate();
