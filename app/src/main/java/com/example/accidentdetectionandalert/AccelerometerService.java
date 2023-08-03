@@ -1,4 +1,4 @@
-package com.example.accidentdetectionandalert;
+/*package com.example.accidentdetectionandalert;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -106,7 +106,7 @@ public class AccelerometerService extends Service implements SensorEventListener
      */
 
 
-    @Override
+   /* @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         createNotificationChannel();
         Intent i = new Intent(this, MainActivity.class);
@@ -159,7 +159,7 @@ public class AccelerometerService extends Service implements SensorEventListener
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         Log.d("AccelerometerService", "Sent Acceleration Data: " + acceleration);
     }
-}
+}*/
 
    /* @Override
     public boolean stopService(Intent name) {
