@@ -45,7 +45,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".RegistrationActivity"
+        <activity
+            android:name=".RegistrationActivity"
+            android:label="Registration Activity"
             android:exported="false" />
 
         <activity android:name=".MainActivity" />
