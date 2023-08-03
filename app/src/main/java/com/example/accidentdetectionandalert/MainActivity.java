@@ -1,4 +1,4 @@
-/*package com.example.accidentdetectionandalert;
+package com.example.accidentdetectionandalert;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -314,9 +314,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onPause() {
         super.onPause();
-        // Unregister the accelerometer receiver to avoid leaks
+       /* // Unregister the accelerometer receiver to avoid leaks
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);*/
-       /* // Stop the LineChart updates when the activity is paused
+        // Stop the LineChart updates when the activity is paused
         stopLineChartUpdates();
     }
 
@@ -504,4 +504,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // or any other representation that fits your use case
         return String.format("%02d:%02d", value / 60, value % 60);
     }
-}  */
+}
