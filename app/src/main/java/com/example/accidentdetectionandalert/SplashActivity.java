@@ -8,7 +8,7 @@ package com.example.accidentdetectionandalert;
 public class SplashActivity extends AppCompatActivity {
 
     // Splash screen duration in milliseconds
-    private static final int SPLASH_DURATION = 6000;
+    private static final int SPLASH_DURATION = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
