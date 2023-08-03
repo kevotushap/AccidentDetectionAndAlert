@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
-public class abort extends AppCompatActivity {
+public class abort extends AppCompatActivity implements SensorEventListener {
 
     Location location; // location
     double latitude; // latitude
@@ -45,8 +45,11 @@ public class abort extends AppCompatActivity {
         setContentView(R.layout.abort);
         abortBt = findViewById(R.id.abort1);
 
-        // Add this line to initialize the SensorManager
+        // Initialize the sensor manager and accelerometer sensor
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager != null) {
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
 
         //extracting no//
         FileInputStream fis = null;
@@ -123,7 +126,6 @@ public class abort extends AppCompatActivity {
         // Not used in this example
     }
 
-
     private class LocationTask extends AsyncTask<Void, Void, Location> {
 
         @Override
@@ -140,43 +142,32 @@ public class abort extends AppCompatActivity {
         protected void onPostExecute(Location location) {
             super.onPostExecute(location);
             if (latitude != 0.0 && longitude != 0.0) {
-                new SendSmsTask().execute(); // Send SMS in the background
+                sendAccidentSMS();
             } else {
                 Toast.makeText(abort.this, "Failed to get location. Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private class SendSmsTask extends AsyncTask<Void, Void, Void> {
+    private void sendAccidentSMS() {
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            // Send SMS
-            String message = "Accident detected! Need help!";
-            String phoneNumber = MainActivity.no1; // Change this to the desired phone number
+        // Send SMS
+        String message = "Accident detected! Need help!";
+        String phoneNumber = MainActivity.no1; // Change this to the desired phone number
 
-            // Access SHAKE_THRESHOLD value from AccelerometerService class
-            float shakeThreshold = AccelerometerService.getShakeThreshold();
+        // Access SHAKE_THRESHOLD value from AccelerometerService class
+        float shakeThreshold = AccelerometerService.getShakeThreshold();
 
-            Toast.makeText(abort.this, "Latitude" + latitude + " Longitude" + longitude, Toast.LENGTH_LONG).show();
-            SmsManager sm = SmsManager.getDefault();
-            for (String s : Arrays.asList("Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml")) {
-                sm.sendTextMessage(MainActivity.no1, null, s, null, null);
-            }
-            sm.sendTextMessage(MainActivity.no2, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
-            sm.sendTextMessage(MainActivity.no2, null, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml", null, null);
-            sm.sendTextMessage(MainActivity.no3, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
-            sm.sendTextMessage(MainActivity.no3, null, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml", null, null);
-
-            Toast.makeText(abort.this, "MESSAGE SEND", Toast.LENGTH_SHORT).show();
-            return null;
+        Toast.makeText(abort.this, "Latitude" + latitude + " Longitude" + longitude, Toast.LENGTH_LONG).show();
+        SmsManager sm = SmsManager.getDefault();
+        for (String s : Arrays.asList("Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml")) {
+            sm.sendTextMessage(MainActivity.no1, null, s, null, null);
         }
+        sm.sendTextMessage(MainActivity.no2, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
+        sm.sendTextMessage(MainActivity.no2, null, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml", null, null);
+        sm.sendTextMessage(MainActivity.no3, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
+        sm.sendTextMessage(MainActivity.no3, null, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml", null, null);
 
-
-        private void sendSms(String phoneNumber, String message) {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-        }
+        Toast.makeText(abort.this, "MESSAGE SEND", Toast.LENGTH_SHORT).show();
     }
 }
-
