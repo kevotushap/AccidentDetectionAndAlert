@@ -70,12 +70,12 @@ public class AccelerometerService extends Service implements SensorEventListener
 
                 if (LocalAcceleration > SHAKE_THRESHOLD) {
                     mLastShakeTime = curTime;
-                    Toast.makeText(getApplicationContext(), "ACCIDENT DETECTED",
-                            Toast.LENGTH_SHORT).show();
-                    Intent ii = new Intent();
-                    ii.setClass(this, abort.class);
-                    ii.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(ii);
+                    Toast.makeText(getApplicationContext(), "ACCIDENT DETECTED", Toast.LENGTH_SHORT).show();
+
+                    // Open the "abort" activity when an accident is detected
+                    Intent abortIntent = new Intent(this, abort.class);
+                    abortIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(abortIntent);
 
                     // Send the accelerometer data to MainActivity using LocalBroadcastManager
                     Intent intent = new Intent("ACCELEROMETER_DATA");
