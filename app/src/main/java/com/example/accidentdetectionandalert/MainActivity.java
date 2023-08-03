@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor accelerometer;
     private float acceleration;
     private final float receivedAcceleration = 0.0f; // Declare as a global variable
+    private static final float SHAKE_THRESHOLD = 4.0f; // m/s^2
     private LineChart lineChart;
     private LineDataSet dataSet;
     private List<Entry> entries;
@@ -119,8 +120,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
                         == PackageManager.PERMISSION_GRANTED;
     }
+
 
     // Request permissions
     private void requestPermissions() {
@@ -128,7 +132,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 new String[]{
                         Manifest.permission.BODY_SENSORS,
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.SEND_SMS
                 },
                 PERMISSION_REQUEST_CODE);
     }
@@ -329,11 +334,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
             // Increment the xValue by the time interval (e.g., 5 seconds per update)
-            xValue +=5;
+            xValue += 5;
 
             // Update the LineChart with accelerometer data
             updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
 
+            // Check if shake threshold is reached
+            if (acceleration > SHAKE_THRESHOLD) {
+                // Shake detected, start AbortActivity
+                Intent intent = new Intent(this, abort.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
+                // Reset the acceleration to 0 after shake is detected
+                acceleration = 0;
+            }
         }
     }
 
