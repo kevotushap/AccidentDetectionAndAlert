@@ -1,4 +1,4 @@
-package com.example.accidentdetectionandalert;
+/*package com.example.accidentdetectionandalert;
 
 import android.location.Location;
 import android.os.Build;
@@ -103,3 +103,4 @@ public class abort extends AppCompatActivity  {
 
     }
 }
+*/
