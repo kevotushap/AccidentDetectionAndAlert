@@ -86,6 +86,7 @@ public class abort extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -177,11 +178,5 @@ public class abort extends AppCompatActivity {
             smsManager.sendTextMessage(phoneNumber, null, message, null, null);
         }
     }
-        @Override
-        protected void onResume() {
-            super.onResume();
-            // Get the device's location in a background thread
-            new LocationTask().execute();
-        }
-    }
+}
 
