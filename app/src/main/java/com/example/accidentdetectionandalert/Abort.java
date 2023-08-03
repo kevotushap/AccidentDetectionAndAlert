@@ -1,5 +1,10 @@
 package com.example.accidentdetectionandalert;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -31,11 +36,18 @@ public class abort extends AppCompatActivity {
     LocationFinder finder;
     private static final float SHAKE_THRESHOLD = 12.0f; // m/s^2
 
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.abort);
         abortBt = findViewById(R.id.abort1);
+
+        // Add this line to initialize the SensorManager
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
         //extracting no//
         FileInputStream fis = null;
         try {
@@ -51,7 +63,6 @@ public class abort extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -75,6 +86,42 @@ public class abort extends AppCompatActivity {
             }
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Register the accelerometer sensor listener
+        sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister the accelerometer sensor listener to save battery
+        sensorManager.unregisterListener((SensorEventListener) this);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+
+            // Calculate the acceleration magnitude
+            float acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+
+            if (acceleration > SHAKE_THRESHOLD) {
+                // Device is shaken, perform actions here (e.g., send messages)
+                sendAccidentSMS();
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Not used in this example
+    }
+
 
     private class LocationTask extends AsyncTask<Void, Void, Location> {
 
@@ -92,45 +139,49 @@ public class abort extends AppCompatActivity {
         protected void onPostExecute(Location location) {
             super.onPostExecute(location);
             if (latitude != 0.0 && longitude != 0.0) {
-                sendAccidentSMS();
+                new SendSmsTask().execute(); // Send SMS in the background
             } else {
                 Toast.makeText(abort.this, "Failed to get location. Please try again.", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void sendAccidentSMS() {
-        // Send SMS
-        String message = "Accident detected! Need help!";
-        String phoneNumber = MainActivity.no1; // Change this to the desired phone number
-
-        // Access SHAKE_THRESHOLD value from AccelerometerService class
-        float shakeThreshold = AccelerometerService.getShakeThreshold();
-
-        Toast.makeText(abort.this, "Latitude" + latitude + " Longitude" + longitude, Toast.LENGTH_LONG).show();
-        SmsManager sm = SmsManager.getDefault();
-        for (String s : Arrays.asList("Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml")) {
-            sm.sendTextMessage(MainActivity.no1, null, s, null, null);
-        }
-        sm.sendTextMessage(MainActivity.no2, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
-        sm.sendTextMessage(MainActivity.no2, null, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml", null, null);
-        sm.sendTextMessage(MainActivity.no3, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
-        sm.sendTextMessage(MainActivity.no3, null, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml", null, null);
-
-        Toast.makeText(abort.this, "MESSAGE SEND", Toast.LENGTH_SHORT).show();
-    }
-
-    private class SendSmsTask extends AsyncTask<String, Void, Void> {
+    private class SendSmsTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Void doInBackground(String... params) {
-            String phoneNumber = params[0];
-            String message = params[1];
+        protected Void doInBackground(Void... voids) {
+            // Send SMS
+            String message = "Accident detected! Need help!";
+            String phoneNumber = MainActivity.no1; // Change this to the desired phone number
 
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            // Access SHAKE_THRESHOLD value from AccelerometerService class
+            float shakeThreshold = AccelerometerService.getShakeThreshold();
 
+            Toast.makeText(abort.this, "Latitude" + latitude + " Longitude" + longitude, Toast.LENGTH_LONG).show();
+            SmsManager sm = SmsManager.getDefault();
+            for (String s : Arrays.asList("Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml")) {
+                sm.sendTextMessage(MainActivity.no1, null, s, null, null);
+            }
+            sm.sendTextMessage(MainActivity.no2, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
+            sm.sendTextMessage(MainActivity.no2, null, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml", null, null);
+            sm.sendTextMessage(MainActivity.no3, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
+            sm.sendTextMessage(MainActivity.no3, null, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml", null, null);
+
+            Toast.makeText(abort.this, "MESSAGE SEND", Toast.LENGTH_SHORT).show();
             return null;
         }
+
+
+        private void sendSms(String phoneNumber, String message) {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+        }
     }
-}
+        @Override
+        protected void onResume() {
+            super.onResume();
+            // Get the device's location in a background thread
+            new LocationTask().execute();
+        }
+    }
+
