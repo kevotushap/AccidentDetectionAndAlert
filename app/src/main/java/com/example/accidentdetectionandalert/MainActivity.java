@@ -313,8 +313,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onPause() {
         super.onPause();
-        // Unregister the accelerometer receiver to avoid leaks
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
+       /* // Unregister the accelerometer receiver to avoid leaks
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);*/
+        // Stop the LineChart updates when the activity is paused
+        stopLineChartUpdates();
     }
 
     @Override
