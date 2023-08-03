@@ -1,4 +1,4 @@
-/*package com.example.accidentdetectionandalert;
+package com.example.accidentdetectionandalert;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -139,4 +139,3 @@ public class LocationFinder extends Service implements LocationListener {
         return null;
     }
 }
-*/
