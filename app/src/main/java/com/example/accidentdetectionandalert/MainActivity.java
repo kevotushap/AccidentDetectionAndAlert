@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     double latitude, longitude;
     LocationFinder finder;
     private SensorManager sensorManager;
-    private Sensor accelerometer;
     private float acceleration;
     private final float receivedAcceleration = 0.0f; // Declare as a global variable
     private LineChart lineChart;
@@ -286,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Register the accelerometer sensor
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
-            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             if (accelerometer != null) {
                 sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
             } else {
@@ -314,8 +313,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onPause() {
         super.onPause();
-       /* // Unregister the accelerometer receiver to avoid leaks
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);*/
+       // Unregister the accelerometer receiver to avoid leaks
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
         // Stop the LineChart updates when the activity is paused
         stopLineChartUpdates();
     }
@@ -408,7 +407,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 entries.add(new Entry(xValue, receivedAcceleration));
 
                 // Check the size of the entries array before updating the LineChart
-                if (entries.size() > 0) {
+                if (entries.size() >= 1) {
                     LineDataSet dataSet = new LineDataSet(entries, "Data");
                     dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
                     dataSet.setDrawCircles(false);
