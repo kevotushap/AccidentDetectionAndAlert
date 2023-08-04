@@ -56,10 +56,9 @@ public class RegistrationActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBarA);
 
         if(fAuth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+            startActivity(new Intent(getApplicationContext(),RegistrationActivity.class));
             finish();
         }
-
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
