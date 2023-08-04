@@ -27,13 +27,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RegistrationActivity extends AppCompatActivity {
+public class Registration extends AppCompatActivity {
     public static final String TAG = "TAG";
     private EditText firstNameEditText, lastNameEditText, emailEditText, passwordEditText;
-    private TextView registerscrnTextView,lnkLoginTextView;
-    private Button   btnLogin;
+    private TextView loginscrnTextView,lnkLoginTextView;
+    private Button btnLogin;
     private FirebaseAuth fAuth;
-     private ProgressBar progressBar;
+    private ProgressBar progressBar;
     private FirebaseFirestore fStore;
     private String userID;
 
@@ -42,25 +42,23 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-
-        registerscrnTextView = findViewById(R.id.registerscrn);
-        firstNameEditText = findViewById(R.id.first_name_edit_textA);
-        lastNameEditText = findViewById(R.id.last_name_edit_textA);
-        emailEditText = findViewById(R.id.email_edit_textA);
-        passwordEditText = findViewById(R.id.password_edit_textA);
-        Button btnLogin = findViewById(R.id.btn_registerA);
-        lnkLoginTextView = findViewById(R.id.lnk_loginA);
-
+        loginscrnTextView = findViewById(R.id.registerscrn);
+        firstNameEditText = findViewById(R.id.textViewA);
+        lastNameEditText = findViewById(R.id.last_name_edit_text);
+        emailEditText = findViewById(R.id.email_edit_text);
+        passwordEditText = findViewById(R.id.password_edit_text);
+        Button btnLogin = findViewById(R.id.btn_register);
+        lnkLoginTextView = findViewById(R.id.lnk_login);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
-        progressBar = findViewById(R.id.progressBarA);
+        progressBar = findViewById(R.id.progressBar);
 
-        // Automatically navigate to RegistrationActivity if there is no authenticated user
-        if (fAuth.getCurrentUser() == null) {
-            startActivity(new Intent(this, RegistrationActivity.class));
+        if(fAuth.getCurrentUser() != null){
+            startActivity(new Intent(getApplicationContext(),MainActivity.class));
             finish();
         }
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +98,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             fUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(RegistrationActivity.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Registration.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -109,7 +107,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 }
                             });
 
-                            Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Registration.this, "User Created.", Toast.LENGTH_SHORT).show();
                             userID = fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String,Object> user = new HashMap<>();
@@ -127,10 +125,10 @@ public class RegistrationActivity extends AppCompatActivity {
                                     Log.d(TAG, "onFailure: " + e.toString());
                                 }
                             });
-                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                            finish(); // Finish the RegistrationActivity so that the user cannot navigate back to it using the back button.
+                            startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+
                         }else {
-                            Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Registration.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }
@@ -138,12 +136,14 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
+
+
         lnkLoginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                finish();
+                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
             }
         });
+
     }
 }
