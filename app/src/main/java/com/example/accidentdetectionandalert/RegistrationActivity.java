@@ -27,10 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Registration extends AppCompatActivity {
+public class RegistrationActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     private EditText firstNameEditText, lastNameEditText, emailEditText, passwordEditText;
-    private TextView loginscrnTextView,lnkLoginTextView;
+    private TextView loginscrnTextView, createTextView, lnkLoginTextView;
     private Button btnLogin;
     private FirebaseAuth fAuth;
     private ProgressBar progressBar;
@@ -43,16 +43,17 @@ public class Registration extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         loginscrnTextView = findViewById(R.id.registerscrn);
-        firstNameEditText = findViewById(R.id.textViewA);
-        lastNameEditText = findViewById(R.id.last_name_edit_text);
-        emailEditText = findViewById(R.id.email_edit_text);
-        passwordEditText = findViewById(R.id.password_edit_text);
-        Button btnLogin = findViewById(R.id.btn_register);
-        lnkLoginTextView = findViewById(R.id.lnk_login);
+        createTextView = findViewById(R.id.textViewA);
+        firstNameEditText = findViewById(R.id.first_name_edit_textA);
+        lastNameEditText = findViewById(R.id.last_name_edit_textA);
+        emailEditText = findViewById(R.id.email_edit_textA);
+        passwordEditText = findViewById(R.id.password_edit_textA);
+        Button btnLogin = findViewById(R.id.btn_registerA);
+        lnkLoginTextView = findViewById(R.id.lnk_loginA);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBarA);
 
         if(fAuth.getCurrentUser() != null){
             startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -98,7 +99,7 @@ public class Registration extends AppCompatActivity {
                             fUser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(Registration.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegistrationActivity.this, "Verification Email Has been Sent.", Toast.LENGTH_SHORT).show();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -107,7 +108,7 @@ public class Registration extends AppCompatActivity {
                                 }
                             });
 
-                            Toast.makeText(Registration.this, "User Created.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, "User Created.", Toast.LENGTH_SHORT).show();
                             userID = fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String,Object> user = new HashMap<>();
@@ -128,15 +129,13 @@ public class Registration extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(),LoginActivity.class));
 
                         }else {
-                            Toast.makeText(Registration.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegistrationActivity.this, "Error ! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }
                 });
             }
         });
-
-
 
         lnkLoginTextView.setOnClickListener(new View.OnClickListener() {
             @Override
