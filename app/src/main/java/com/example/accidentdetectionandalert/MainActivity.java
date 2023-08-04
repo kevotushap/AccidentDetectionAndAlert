@@ -39,6 +39,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -327,6 +328,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             // Calculate the acceleration
             acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
+            // Increment the xValue by the time interval (e.g., 5 seconds per update)
+            xValue +=5;
+
             // Update the LineChart with accelerometer data
             updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
 
@@ -355,6 +359,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.BLACK);
         xAxis.setDrawGridLines(false);
+
+        xAxis.setValueFormatter(new IndexAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                // Convert the float value to time representation (e.g., 10:30 AM)
+                // You need to implement this conversion based on your time data
+                // For example: return formatTime(value);
+                return formatTime((int) value);
+            }
+        });
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setTextColor(Color.BLACK);
@@ -422,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if (lineChart.getVisibility() == View.VISIBLE) {
                     updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
                 }
-                handler.postDelayed(this, 3000); // Update chart every 3 seconds
+                handler.postDelayed(this, 5000); // Update chart every 3 seconds
             }
         };
         handler.post(dataRunnable);
@@ -480,5 +494,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onNothingSelected() {
         // Handle when nothing is selected (Optional)
         // You can leave it empty or implement any specific action
+    }
+
+    private String formatTime(int value) {
+        // Format the time in "minutes:seconds" format with leading zeros
+        return String.format("%02d:%02d", value / 60, value % 60);
     }
 }
