@@ -11,6 +11,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -110,6 +111,43 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // Initialize the LineChart after setting the layout
         initLineChart();
+    }
+
+    // AsyncTask to perform the long-running task in the background
+    private class MyAsyncTask extends AsyncTask<Void, Void, Result> {
+
+        @Override
+        protected Result doInBackground(Void... voids) {
+            // Perform your long-running task here
+            Result result = performLongRunningTask(); // Replace with your actual method for the long-running task
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Result result) {
+            // This method runs on the main thread and receives the result from doInBackground
+            // Update the UI with the result
+            updateUIWithData(result); // Replace with your actual method to update the UI
+        }
+    }
+
+    private Result performLongRunningTask() {
+        // Replace this with your actual long-running task code
+        // For example, making a network request or performing complex calculations
+        try {
+            // Simulate a long-running task with a 5 seconds delay
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Return a result if needed
+        return new Result("Long-running task completed");
+    }
+
+    private void updateUIWithData(Result result) {
+        // Update the UI with the data received from the long-running task
+        Toast.makeText(this, result.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     // Check if the required permissions are granted
@@ -219,6 +257,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                // Start the AsyncTask to perform the long-running task
+                MyAsyncTask myAsyncTask = new MyAsyncTask();
+                myAsyncTask.execute();
             }
         });
 
@@ -498,9 +539,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private String formatTime(int value) {
-        // Implement your time formatting logic here
-        // For example: return formatted time in "HH:mm" format
-        // or any other representation that fits your use case
+        // Format the time in "minutes:seconds" format with leading zeros
         return String.format("%02d:%02d", value / 60, value % 60);
+    }
+
+    // Inner class to hold the result of the long-running task
+    private static class Result {
+        private String message;
+
+        public Result(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
+        }
     }
 }
