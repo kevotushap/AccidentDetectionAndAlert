@@ -11,7 +11,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,7 +39,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -66,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     double latitude, longitude;
     LocationFinder finder;
     private SensorManager sensorManager;
+    private Sensor accelerometer;
     private float acceleration;
     private final float receivedAcceleration = 0.0f; // Declare as a global variable
     private LineChart lineChart;
@@ -108,46 +107,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             // Request permissions
             requestPermissions();
         }
-
         // Initialize the LineChart after setting the layout
         initLineChart();
-    }
-
-    // AsyncTask to perform the long-running task in the background
-    private class MyAsyncTask extends AsyncTask<Void, Void, Result> {
-
-        @Override
-        protected Result doInBackground(Void... voids) {
-            // Perform your long-running task here
-            Result result = performLongRunningTask(); // Replace with your actual method for the long-running task
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(Result result) {
-            // This method runs on the main thread and receives the result from doInBackground
-            // Update the UI with the result
-            updateUIWithData(result); // Replace with your actual method to update the UI
-        }
-    }
-
-    private Result performLongRunningTask() {
-        // Replace this with your actual long-running task code
-        // For example, making a network request or performing complex calculations
-        try {
-            // Simulate a long-running task with a 5 seconds delay
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        // Return a result if needed
-        return new Result("Long-running task completed");
-    }
-
-    private void updateUIWithData(Result result) {
-        // Update the UI with the data received from the long-running task
-        Toast.makeText(this, result.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     // Check if the required permissions are granted
@@ -257,9 +218,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                // Start the AsyncTask to perform the long-running task
-                MyAsyncTask myAsyncTask = new MyAsyncTask();
-                myAsyncTask.execute();
             }
         });
 
@@ -326,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Register the accelerometer sensor
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager != null) {
-            Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             if (accelerometer != null) {
                 sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
             } else {
@@ -354,10 +312,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onPause() {
         super.onPause();
-       // Unregister the accelerometer receiver to avoid leaks
+        // Unregister the accelerometer receiver to avoid leaks
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
-        // Stop the LineChart updates when the activity is paused
-        stopLineChartUpdates();
     }
 
     @Override
@@ -370,9 +326,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             // Calculate the acceleration
             acceleration = (float) Math.sqrt(x * x + y * y + z * z);
-
-            // Increment the xValue by the time interval (e.g., 5 seconds per update)
-            xValue +=5;
 
             // Update the LineChart with accelerometer data
             updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
@@ -402,15 +355,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.BLACK);
         xAxis.setDrawGridLines(false);
-        xAxis.setValueFormatter(new IndexAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                // Convert the float value to time representation (e.g., 10:30 AM)
-                // You need to implement this conversion based on your time data
-                // For example: return formatTime(value);
-                return formatTime((int) value);
-            }
-        });
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.setTextColor(Color.BLACK);
@@ -448,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 entries.add(new Entry(xValue, receivedAcceleration));
 
                 // Check the size of the entries array before updating the LineChart
-                if (entries.size() >= 1) {
+                if (entries.size() > 0) {
                     LineDataSet dataSet = new LineDataSet(entries, "Data");
                     dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
                     dataSet.setDrawCircles(false);
@@ -457,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     LineData lineData = new LineData(dataSet);
                     lineChart.setData(lineData);
                     lineChart.moveViewToX(xValue); // Move the chart view to the latest entry
-                    lineChart.setVisibleXRangeMaximum(5); // Display 5 seconds of data at a time
+                    lineChart.setVisibleXRangeMaximum(10); // Display 100 entries at a time
                     lineChart.invalidate(); // Refresh the chart
                 } else {
                     // Handle the case where the entries array is empty
@@ -476,9 +420,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void run() {
                 if (lineChart.getVisibility() == View.VISIBLE) {
-                    updateLineChartWithAccelerometerData(acceleration, lineChart, entries, xValue);
+                    updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
                 }
-                handler.postDelayed(this, 5000); // Update chart every 5 seconds
+                handler.postDelayed(this, 3000); // Update chart every 3 seconds
             }
         };
         handler.post(dataRunnable);
@@ -536,23 +480,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onNothingSelected() {
         // Handle when nothing is selected (Optional)
         // You can leave it empty or implement any specific action
-    }
-
-    private String formatTime(int value) {
-        // Format the time in "minutes:seconds" format with leading zeros
-        return String.format("%02d:%02d", value / 60, value % 60);
-    }
-
-    // Inner class to hold the result of the long-running task
-    private static class Result {
-        private String message;
-
-        public Result(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
-        }
     }
 }
