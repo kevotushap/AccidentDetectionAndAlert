@@ -96,11 +96,8 @@ public class abort extends AppCompatActivity  {
         abortBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                abortButtonClicked = true;
                 System.exit(1);
             }
         });
-
-
-
     }
-}
