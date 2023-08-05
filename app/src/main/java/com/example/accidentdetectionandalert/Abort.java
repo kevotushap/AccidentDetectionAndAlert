@@ -23,7 +23,8 @@ public class abort extends AppCompatActivity  {
     Location location; // location
     double latitude; // latitude
     double longitude; // longitude
-
+    boolean abortButtonClicked = false;
+    boolean messageSent = false;
 
     Button abortBt;
     LocationFinder finder;
