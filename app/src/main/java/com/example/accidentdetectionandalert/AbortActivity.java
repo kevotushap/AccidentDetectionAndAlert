@@ -35,7 +35,6 @@ public class AbortActivity extends AppCompatActivity {
     LocationFinder finder;
 
     private static final int PERMISSION_REQUEST_CODE = 1;
-    /*private String SmsManager;*/
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -57,14 +56,13 @@ public class AbortActivity extends AppCompatActivity {
 
     // Check if SMS permission is granted
     private boolean checkSMSPermission() {
-        return ActivityCompat.checkSelfPermission(this, SmsManager)
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
-    // Request SMS permission
     private void requestSMSPermission() {
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.SmsManager},
+                new String[]{Manifest.permission.SEND_SMS},
                 PERMISSION_REQUEST_CODE);
     }
 
@@ -84,7 +82,7 @@ public class AbortActivity extends AppCompatActivity {
     }
 
     private void init() {
-        FileInputStream fis = null;
+        FileInputStream fis;
         try {
             fis = openFileInput(MainActivity.FILE_NAME);
             InputStreamReader isr = new InputStreamReader(fis);
