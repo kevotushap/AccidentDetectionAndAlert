@@ -16,8 +16,11 @@
             android:id="@+id/nav_profile_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/default_profile_image" />
-            />
+            android:src="@drawable/default_profile_image"
+            android:contentDescription="Profile Image"
+            android:clickable="true"
+            android:focusable="true"/>
+
 
         <TextView
             android:id="@+id/nav_username"
