@@ -112,7 +112,7 @@ public class AbortActivity extends AppCompatActivity {
                     ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
                 }
             }
-        }, 2000);
+        }, 1000);
 
         finder = new LocationFinder(this);
         if (finder.canGetLocation()) {
