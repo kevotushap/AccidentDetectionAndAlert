@@ -104,7 +104,7 @@ public class abort extends AppCompatActivity {
 
         // Mark the message as sent
         messageSent = true;
-        
+
         Toast.makeText(abort.this, "MESSAGE SEND", Toast.LENGTH_SHORT).show();
     }
 }
