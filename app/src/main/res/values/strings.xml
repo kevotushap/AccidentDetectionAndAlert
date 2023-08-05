@@ -4,7 +4,8 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="don_t_have_an_account_register_here">Don\'t have an Account? Register here.</string>
+    <string name="don_t_have_an_account_register_here">Don\'t have an Account?
+        Register here.</string>
     <string name="drawerOpen">drawerOpen</string>
     <string name="drawerClose">drawerClose</string>
     <string name="open">Open</string>
