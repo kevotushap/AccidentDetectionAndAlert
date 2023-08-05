@@ -56,14 +56,14 @@ public class abort extends AppCompatActivity {
 
     // Check if SMS permission is granted
     private boolean checkSMSPermission() {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.sendMessages)
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
     // Request SMS permission
     private void requestSMSPermission() {
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.sendMessages},
+                new String[]{Manifest.permission.SEND_SMS},
                 PERMISSION_REQUEST_CODE);
     }
 
