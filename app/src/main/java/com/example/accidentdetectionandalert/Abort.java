@@ -83,9 +83,7 @@ public class abort extends AppCompatActivity {
             }
         }, 5000);
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        private void sendMessages() {
                 Toast.makeText(abort.this, "Latitude" + latitude + " Longitude" + longitude, Toast.LENGTH_LONG).show();
                 SmsManager sm = SmsManager.getDefault();
                 sm.sendTextMessage(MainActivity.no1, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
