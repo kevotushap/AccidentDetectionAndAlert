@@ -1,5 +1,6 @@
 package com.example.accidentdetectionandalert;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
