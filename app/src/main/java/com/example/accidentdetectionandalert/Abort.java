@@ -102,7 +102,9 @@ public class abort extends AppCompatActivity {
         sm.sendTextMessage(MainActivity.no3, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
         sm.sendTextMessage(MainActivity.no3, null, "Nearby Hospitals http://maps.google.com/maps?q=hospital&mrt=yp&sll=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "&output=kml", null, null);
 
+        // Mark the message as sent
+        messageSent = true;
+        
         Toast.makeText(abort.this, "MESSAGE SEND", Toast.LENGTH_SHORT).show();
-
     }
 }
