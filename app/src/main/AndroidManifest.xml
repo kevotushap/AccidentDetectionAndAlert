@@ -52,7 +52,7 @@
 
         <activity android:name=".MainActivity" />
 
-        <activity android:name=".abort"
+        <activity android:name=".AbortActivity"
             android:exported="false" />
 
         <service
