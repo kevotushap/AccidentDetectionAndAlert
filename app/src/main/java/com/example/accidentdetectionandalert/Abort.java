@@ -56,14 +56,14 @@ public class abort extends AppCompatActivity {
 
     // Check if SMS permission is granted
     private boolean checkSMSPermission() {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.sendMessages)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
     // Request SMS permission
     private void requestSMSPermission() {
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.SEND_SMS},
+                new String[]{Manifest.permission.sendMessages},
                 PERMISSION_REQUEST_CODE);
     }
 
@@ -131,7 +131,7 @@ public class abort extends AppCompatActivity {
             @Override
             public void run() {
                 if (!abortButtonClicked && !messageSent) {
-                    SEND_SMS();
+                    sendMessages();
                 }
             }
         }, 15000);
@@ -145,7 +145,7 @@ public class abort extends AppCompatActivity {
         });
     }
 
-    private void SEND_SMS() {
+    private void sendMessages() {
         Toast.makeText(abort.this, "Latitude" + latitude + " Longitude" + longitude, Toast.LENGTH_LONG).show();
         SmsManager sm = SmsManager.getDefault();
         sm.sendTextMessage(MainActivity.no1, null, "Help! I've met with an accident at http://maps.google.com/?q=" + String.valueOf(latitude) + "," + String.valueOf(longitude) + "\nMy Blood Group is = " + MainActivity.bgrp, null, null);
