@@ -56,14 +56,14 @@ public class abort extends AppCompatActivity {
 
     // Check if SMS permission is granted
     private boolean checkSMSPermission() {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.SmsManager)
                 == PackageManager.PERMISSION_GRANTED;
     }
 
     // Request SMS permission
     private void requestSMSPermission() {
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.SEND_SMS},
+                new String[]{Manifest.permission.SmsManager},
                 PERMISSION_REQUEST_CODE);
     }
 
@@ -83,11 +83,6 @@ public class abort extends AppCompatActivity {
     }
 
     private void init() {
-        // Extract phone numbers
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.abort);
-        abortBt = findViewById(R.id.abort1);
-        //extracting no//
         FileInputStream fis = null;
         try {
             fis = openFileInput(MainActivity.FILE_NAME);
