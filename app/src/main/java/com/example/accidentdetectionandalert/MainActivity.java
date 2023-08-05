@@ -6,18 +6,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private int xValue = 0;
     private Handler handler;
     private Runnable dataRunnable;
+    private ImageView navProfileImageView;
+    private TextView navNameTextView;
 
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -111,6 +117,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         // Initialize the LineChart after setting the layout
         initLineChart();
+
+        // Initialize the navigation header views
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        navProfileImageView = headerView.findViewById(R.id.nav_profile_image);
+        navNameTextView = headerView.findViewById(R.id.nav_name);
+
+        // ImageView click listener to pick an image
+        navProfileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickImage();
+            }
+        });
+
+        // TextView click listener to set a name
+        navNameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setName();
+            }
+        });
     }
 
     // Check if the required permissions are granted
@@ -479,6 +507,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         // Unregister the accelerometer receiver from LocalBroadcastManager
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
+    }
+
+    private void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE);
+    }
+
+    private void setName() {
+        // Implement the logic to edit the name here
+        // For example, you can show a dialog or input field to the user
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            try {
+                Uri imageUri = data.getData();
+                Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                navProfileImageView.setImageBitmap(selectedImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
