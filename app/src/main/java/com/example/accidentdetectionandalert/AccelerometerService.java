@@ -72,8 +72,8 @@ public class AccelerometerService extends Service implements SensorEventListener
                     mLastShakeTime = curTime;
                     Toast.makeText(getApplicationContext(), "ACCIDENT DETECTED", Toast.LENGTH_SHORT).show();
 
-                    // Open the "abort" activity when an accident is detected
-                    Intent abortIntent = new Intent(this, abort.class);
+                    // Open the "AbortActivity" activity when an accident is detected
+                    Intent abortIntent = new Intent(this, AbortActivity.class);
                     abortIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(abortIntent);
 
