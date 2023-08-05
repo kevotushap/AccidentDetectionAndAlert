@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -106,6 +107,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Inside your onCreate method
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String profileImageUriString = sharedPreferences.getString("profileImageUri", null);
+
+        if (profileImageUriString != null) {
+            Uri profileImageUri = Uri.parse(profileImageUriString);
+            try {
+                Bitmap savedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), profileImageUri);
+                navProfileImageView.setImageBitmap(savedImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         // Check if the required permissions are granted, and request them if not
         if (checkPermissions()) {
@@ -531,6 +546,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 e.printStackTrace();
             }
         }
+    }
+
+    private void saveImageUriToSharedPreferences(Uri imageUri) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("profileImageUri", imageUri.toString());
+        editor.apply();
     }
 
     @Override
