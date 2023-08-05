@@ -64,7 +64,7 @@ public class abort extends AppCompatActivity {
                     ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(150);
                 }
             }
-        }, 5000);
+        }, 10000);
 
         finder = new LocationFinder(this);
         if (finder.canGetLocation()) {
@@ -81,7 +81,7 @@ public class abort extends AppCompatActivity {
                     sendMessages();
                 }
             }
-        }, 5000);
+        }, 15000);
 
         abortBt.setOnClickListener(new View.OnClickListener() {
             @Override
