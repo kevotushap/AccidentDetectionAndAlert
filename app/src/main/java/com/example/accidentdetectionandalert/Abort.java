@@ -70,10 +70,19 @@ public class abort extends AppCompatActivity {
         if (finder.canGetLocation()) {
             latitude = finder.getLatitude();
             longitude = finder.getLongitude();
-
         } else {
             finder.showSettingsAlert();
         }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!abortButtonClicked && !messageSent) {
+                    sendMessages();
+                }
+            }
+        }, 5000);
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
