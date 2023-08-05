@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Toolbar toolbar;
 
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final int IMAGE_PICK_REQUEST_CODE = 2;
 
     private final BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
         @Override
