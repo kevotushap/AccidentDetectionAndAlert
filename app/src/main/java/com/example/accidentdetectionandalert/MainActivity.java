@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
 
         // Inside your onCreate method
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String profileImageUriString = sharedPreferences.getString("profileImageUri", null);
         savedUsername = sharedPreferences.getString("username", null);
 
@@ -132,9 +132,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // Initialize the navigation header views
         NavigationView navigationView = findViewById(R.id.nav_view);
+        /*View headerView = navigationView.getHeaderView(0);
+        navProfileImageView = headerView.findViewById(R.id.nav_profile_image);*/
+
+        // Inflate the navigation header layout
         View headerView = navigationView.getHeaderView(0);
+
+        // Find the views within the headerView
         navProfileImageView = headerView.findViewById(R.id.nav_profile_image);
         navNameTextView = headerView.findViewById(R.id.nav_name);
+
 
         // ImageView click listener to pick an image
         navProfileImageView.setOnClickListener(new View.OnClickListener() {
@@ -520,7 +527,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Unregister the accelerometer receiver from LocalBroadcastManager
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
     }
-
 
     private void saveEditedNameToSharedPreferences(String editedName) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
