@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Runnable dataRunnable;
     private ImageView navProfileImageView;
     private TextView navNameTextView;
+    SharedPreferences sharedPreferences;
 
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
