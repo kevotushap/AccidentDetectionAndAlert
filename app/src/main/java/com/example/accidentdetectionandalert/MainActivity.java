@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String profileImageUriString = sharedPreferences.getString("profileImageUri", null);
         savedUsername = sharedPreferences.getString("username", null);
-        
 
         // Check if the required permissions are granted, and request them if not
         if (checkPermissions()) {
@@ -522,6 +521,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
+    private void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE);
+    }
+
+    private void saveImageUriToSharedPreferences(Uri imageUri) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("profileImageUri", imageUri.toString());
+        editor.apply();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            try {
+                selectedImageUri = data.getData();
+                Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                navProfileImageView.setImageBitmap(selectedImage);
+                saveImageUriToSharedPreferences(selectedImageUri); // Save the selected image URI
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     private void setName() {
         // Implement the logic to edit the name here
@@ -568,11 +593,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             editor.apply();
         }
 
-    private void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -585,13 +605,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 e.printStackTrace();
             }
         }
-    }
-
-    private void saveImageUriToSharedPreferences(Uri imageUri) {
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("profileImageUri", imageUri.toString());
-        editor.apply();
     }
 
     @Override
