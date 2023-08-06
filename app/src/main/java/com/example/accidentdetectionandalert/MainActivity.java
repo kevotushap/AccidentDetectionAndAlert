@@ -311,10 +311,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         lineChart.setVisibility(View.GONE);
                         break;
 
-                    case R.id.settings:
-                        Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
-                        break;
-
                     case R.id.exit:
                         Toast.makeText(getApplicationContext(), "Exit", Toast.LENGTH_SHORT).show();
                         finish();
@@ -484,7 +480,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if (lineChart.getVisibility() == View.VISIBLE) {
                     updateLineChartWithAccelerometerData(receivedAcceleration, lineChart, entries, xValue);
                 }
-                handler.postDelayed(this, 5000); // Update chart every 3 seconds
+                handler.postDelayed(this, 5000); // Update chart every 5 seconds
             }
         };
         handler.post(dataRunnable);
