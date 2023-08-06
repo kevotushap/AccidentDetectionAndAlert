@@ -7,9 +7,6 @@
     <item android:id="@+id/serviceStop"
         android:title="Service Stop"/>
 
-    <item android:id="@+id/settings"
-        android:title="Settings"/>
-
     <item android:id="@+id/exit"
         android:title="Exit"/>
 
