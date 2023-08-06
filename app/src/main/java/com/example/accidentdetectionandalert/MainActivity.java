@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private String savedUsername;
     private ImageView navProfileImageView;
     private TextView navNameTextView;
-    private SharedPreferences sharedPreferences;
 
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -106,6 +105,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         }
     };
+
+    private SharedPreferences sharedPreferences;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -521,6 +522,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
 
+    private void saveEditedNameToSharedPreferences(String editedName) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("username", editedName);
+        editor.apply();
+    }
+
+
     private void pickImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE);
@@ -529,7 +537,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private void saveImageUriToSharedPreferences(Uri imageUri) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("profileImageUri", imageUri.toString());
-        editor.apply();
+        editor.commit();
     }
 
     @Override
@@ -547,14 +555,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-
     private void setName() {
-        // Implement the logic to edit the name here
-        // For example, you can show a dialog or input field to the user
-            showEditNameDialog();
-        }
-
-        private void showEditNameDialog() {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Edit Name");
 
@@ -584,13 +585,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             });
 
             builder.show();
-        }
-
-        private void saveEditedNameToSharedPreferences(String editedName) {
-            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("editedName", editedName);
-            editor.apply();
         }
 
     @Override
