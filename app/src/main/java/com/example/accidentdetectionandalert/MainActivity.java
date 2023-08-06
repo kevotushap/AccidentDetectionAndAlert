@@ -1,8 +1,10 @@
 package com.example.accidentdetectionandalert;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -18,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -79,9 +82,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private int xValue = 0;
     private Handler handler;
     private Runnable dataRunnable;
+    private Uri selectedImageUri;
+    private String savedUsername;
     private ImageView navProfileImageView;
     private TextView navNameTextView;
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     NavigationView navigationView;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -102,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     };
 
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,16 +116,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Inside your onCreate method
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String profileImageUriString = sharedPreferences.getString("profileImageUri", null);
-
-        if (profileImageUriString != null) {
-            Uri profileImageUri = Uri.parse(profileImageUriString);
-            try {
-                Bitmap savedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), profileImageUri);
-                navProfileImageView.setImageBitmap(savedImage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        savedUsername = sharedPreferences.getString("username", null);
+        
 
         // Check if the required permissions are granted, and request them if not
         if (checkPermissions()) {
@@ -525,14 +521,56 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         LocalBroadcastManager.getInstance(this).unregisterReceiver(accelerometerReceiver);
     }
 
-    private void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE);
-    }
+
 
     private void setName() {
         // Implement the logic to edit the name here
         // For example, you can show a dialog or input field to the user
+            showEditNameDialog();
+        }
+
+        private void showEditNameDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Edit Name");
+
+            // Set up the input
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String editedName = input.getText().toString().trim();
+                    if (!editedName.isEmpty()) {
+                        // Set the edited name to the TextView
+                        navNameTextView.setText(editedName);
+                        // You can also save the edited name to SharedPreferences for later use
+                        saveEditedNameToSharedPreferences(editedName);
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+        }
+
+        private void saveEditedNameToSharedPreferences(String editedName) {
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("editedName", editedName);
+            editor.apply();
+        }
+
+    private void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, IMAGE_PICK_REQUEST_CODE);
     }
 
     @Override
