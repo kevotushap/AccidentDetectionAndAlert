@@ -594,20 +594,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMAGE_PICK_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            try {
-                Uri imageUri = data.getData();
-                Bitmap selectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                navProfileImageView.setImageBitmap(selectedImage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
     public void onValueSelected(Entry e, Highlight h) {
         // Handle point click event here
         int index = (int) e.getX(); // Get the index of the clicked point
