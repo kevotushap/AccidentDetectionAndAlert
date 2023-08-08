@@ -28,7 +28,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     private Sensor accelerometerSensor;
     private float x1, x2, x3, acceleration;
     private static final float ERROR = (float) 7.0;
-    private static final float SHAKE_THRESHOLD = 9.00f; // m/S**2
+    private static final float SHAKE_THRESHOLD = 5.00f; // m/S**2
     private static final int MIN_TIME_BETWEEN_SHAKES_MILLISECS = 2000;
     private long mLastShakeTime;
     private TextView counter;
