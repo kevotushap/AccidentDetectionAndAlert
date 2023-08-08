@@ -540,7 +540,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("profileImageUri", imageUri.toString());
         editor.commit();
-    }
+    }  
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
