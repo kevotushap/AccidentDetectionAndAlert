@@ -164,14 +164,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onClick(View v) {
                 // Handle the click event here
-                // For example, open a profile activity
+                // For example, open a Settings activity
                 openSettingsActivity();
             }
         });
     }
 
-    // Example function to open a profile activity
-    private void openProfileActivity() {
+    //function to open a Settings Activity
+    private void openSettingsActivity() {
         Intent profileIntent = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(profileIntent);
     }
