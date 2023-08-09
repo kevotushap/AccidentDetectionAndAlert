@@ -158,6 +158,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 setName();
             }
         });
+
+        // Set click listener for the profile image in toolbar
+        navProfileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the click event here
+                // For example, open a profile activity
+                openSettingsActivity();
+            }
+        });
+    }
+
+    // Example function to open a profile activity
+    private void openProfileActivity() {
+        Intent profileIntent = new Intent(MainActivity.this, SettingsActivity.class);
+        startActivity(profileIntent);
     }
 
     // Check if the required permissions are granted
