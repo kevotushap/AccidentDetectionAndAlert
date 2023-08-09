@@ -2,4 +2,5 @@
 <resources>
     <drawable name="ic_profile_placeholder" />
     <drawable name="ic_back" />
+    <drawable name="ic_profile" />
 </resources>
