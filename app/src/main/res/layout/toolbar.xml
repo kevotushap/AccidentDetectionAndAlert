@@ -6,4 +6,18 @@
     android:elevation="4dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/nav_profile_image_toolbar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_profile" />
+
+    </RelativeLayout>
+
 </androidx.appcompat.widget.Toolbar>
