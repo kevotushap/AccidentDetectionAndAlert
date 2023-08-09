@@ -55,6 +55,11 @@
         <activity android:name=".AbortActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/AppTheme"> <!-- Apply your AppCompat theme here -->
+        </activity>
+
         <service
             android:name=".LocationFinder"
             android:enabled="true"
