@@ -57,4 +57,34 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        // Handle notifications switch
+        notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Handle notification settings
+            // Code for enabling/disabling notifications
+        });
+
+        // Handle sign out
+        signOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+
+        private void logout() {
+            // Clear user-related data from SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove("username");
+            editor.remove("profileImageUri");
+            editor.apply();
+
+            // Navigate to the login screen or home screen
+            Intent intent = new Intent(this, LoginActivity.class); // Change LoginActivity with your login activity class
+            startActivity(intent);
+            finish(); // Close the current activity
+        }
+
+        
+
+
     }
