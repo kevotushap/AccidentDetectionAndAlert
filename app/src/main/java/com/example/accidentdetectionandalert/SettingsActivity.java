@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -72,29 +71,28 @@ public class SettingsActivity extends AppCompatActivity {
                 logout();
             }
         });
-
-        private void logout() {
-            // Clear user-related data from SharedPreferences
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.remove("username");
-            editor.remove("profileImageUri");
-            editor.apply();
-
-            // Navigate to the login screen or home screen
-            Intent intent = new Intent(this, LoginActivity.class); // Change LoginActivity with your login activity class
-            startActivity(intent);
-            finish(); // Close the current activity
-        }
+    }
 
         @Override
-        public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        public boolean onOptionsItemSelected (@NonNull MenuItem item){
             if (item.getItemId() == android.R.id.home) {
                 onBackPressed();
                 return true;
             }
             return super.onOptionsItemSelected(item);
         }
+
+    private void logout() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("username");
+        editor.remove("profileImageUri");
+        editor.apply();
+
+        // Navigate to the login screen or home screen
+        Intent intent = new Intent(this, LoginActivity.class); // Change LoginActivity with your login activity class
+        startActivity(intent);
+        finish(); // Close the current activity
     }
+}
 
 
-    }
