@@ -29,6 +29,8 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // Initialize SharedPreferences
+        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         // Initialize views
         profileImageView = findViewById(R.id.profile_image);
@@ -84,7 +86,15 @@ public class SettingsActivity extends AppCompatActivity {
             finish(); // Close the current activity
         }
 
-        
+        @Override
+        public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+            if (item.getItemId() == android.R.id.home) {
+                onBackPressed();
+                return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
 
     }
