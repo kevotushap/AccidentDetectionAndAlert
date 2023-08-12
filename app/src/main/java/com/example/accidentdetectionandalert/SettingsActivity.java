@@ -29,8 +29,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         // Initialize views
         profileImageView = findViewById(R.id.profile_image);
@@ -59,46 +57,4 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        // Handle notifications switch
-        notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Handle notification settings
-            // Code for enabling/disabling notifications
-        });
-
-        // Handle sign out
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
-
-        // Toolbar setup
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Settings");
     }
-
-    private void logout() {
-        // Clear user-related data from SharedPreferences
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove("username");
-        editor.remove("profileImageUri");
-        editor.apply();
-
-        // Navigate to the login screen or home screen
-        Intent intent = new Intent(this, LoginActivity.class); // Change LoginActivity with your login activity class
-        startActivity(intent);
-        finish(); // Close the current activity
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-}
