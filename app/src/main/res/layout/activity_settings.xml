@@ -28,7 +28,7 @@
             app:titleMarginEnd="16dp"
             app:titleMarginStart="30dp"
             app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
-            app:titleTextColor="@android:color/white">
+            app:titleTextColor="@android:color/white"/>
 
             <TextView
                 android:layout_width="match_parent"
