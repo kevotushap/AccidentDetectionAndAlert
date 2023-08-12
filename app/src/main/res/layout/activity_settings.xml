@@ -20,17 +20,27 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/purple_500"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:title="Settings"
-        app:titleTextColor="@android:color/white"
-        app:titleMarginStart="16dp"
-        app:titleMarginEnd="16dp"
-        app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
-        app:layout_collapseMode="pin"
-        app:layout_scrollFlags="scroll|enterAlways"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:layout_collapseMode="pin"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:title="Settings"
+            app:titleMarginEnd="16dp"
+            app:titleMarginStart="30dp"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
+            app:titleTextColor="@android:color/white">
 
-        />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Settings"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
 
 
 
