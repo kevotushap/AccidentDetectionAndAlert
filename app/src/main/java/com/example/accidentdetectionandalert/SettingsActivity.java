@@ -20,6 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private ImageView profileImageView;
     private TextView nameTextView;
+    private TextView emailTextView;
     private RadioGroup themeRadioGroup;
     private Switch notificationsSwitch;
 
