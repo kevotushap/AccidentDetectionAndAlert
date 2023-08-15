@@ -97,7 +97,7 @@
                 android:textColor="@android:color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="@id/profile_layout"/>
 
             <RadioGroup
                 android:id="@+id/radio_group_theme"
