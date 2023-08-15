@@ -35,6 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         // Initialize views
         profileImageView = findViewById(R.id.profile_image);
         nameTextView = findViewById(R.id.name_text_view);
+        emailTextView = findViewById(R.id.email_text_view);
         themeRadioGroup = findViewById(R.id.radio_group_theme);
         notificationsSwitch = findViewById(R.id.switch_notifications);
         Button signOutButton = findViewById(R.id.btn_sign_out);
