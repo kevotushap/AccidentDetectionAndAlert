@@ -22,6 +22,7 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView nameTextView;
     private TextView emailTextView;
     private RadioGroup themeRadioGroup;
+    private TextView notificationTextView;
     private Switch notificationsSwitch;
 
     @Override
@@ -33,10 +34,9 @@ public class SettingsActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         // Initialize views
-        profileImageView = findViewById(R.id.profile_image);
-        nameTextView = findViewById(R.id.name_text_view);
-        emailTextView = findViewById(R.id.email_text_view);
+
         themeRadioGroup = findViewById(R.id.radio_group_theme);
+        notificationTextView = findViewById(R.id.notification_text_view);
         notificationsSwitch = findViewById(R.id.switch_notifications);
         Button signOutButton = findViewById(R.id.btn_sign_out);
 
@@ -95,6 +95,37 @@ public class SettingsActivity extends AppCompatActivity {
         startActivity(intent);
         finish(); // Close the current activity
     }
-}
 
 
+
+/*
+
+
+
+    <TextView
+        android:id="@+id/email_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="johndoe@example.com"
+        android:textSize="16sp"
+        android:textColor="@color/colorSecondary"
+        app:layout_constraintTop_toBottomOf="@+id/name_text_view"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/theme_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Theme"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@+id/email_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+                profileImageView = findViewById(R.id.profile_image);
+        nameTextView = findViewById(R.id.name_text_view);
+        emailTextView = findViewById(R.id.email_text_view);
+*/}
