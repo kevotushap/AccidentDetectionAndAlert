@@ -101,7 +101,6 @@ public class SettingsActivity extends AppCompatActivity {
 /*
 
 
-
     <TextView
         android:id="@+id/email_text_view"
         android:layout_width="0dp"
