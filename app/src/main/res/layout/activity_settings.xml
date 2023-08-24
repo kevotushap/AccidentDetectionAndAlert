@@ -41,20 +41,25 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:src="@drawable/ic_profile"
+        android:background="@drawable/circle_background"
+
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"/>
 
     <TextView
         android:id="@+id/email_text_view"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="johndoe@example.com"
-        android:textSize="16sp"
-        android:textColor="@color/colorSecondary"
-        app:layout_constraintStart_toEndOf="@+id/profile_image"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_image"/>
 
             <RadioGroup
                 android:id="@+id/radio_group_theme"
