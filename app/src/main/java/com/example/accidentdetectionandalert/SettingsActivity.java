@@ -2,7 +2,6 @@ package com.example.accidentdetectionandalert;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,14 +41,14 @@ public class SettingsActivity extends AppCompatActivity {
         notificationsSwitch = findViewById(R.id.switch_notifications);
         Button signOutButton = findViewById(R.id.btn_sign_out);
 
-        // Load and display user's profile image and name
+      /*  // Load and display user's profile image and name
         String profileImageUriString = sharedPreferences.getString("profileImageUri", null);
         Uri profileImageUri = (profileImageUriString != null) ? Uri.parse(profileImageUriString) : null;
         profileImageView.setImageURI(profileImageUri);
         if (profileImageUri != null) {
             profileImageView.setImageURI(profileImageUri);
         }
-        emailTextView.setText(sharedPreferences.getString("username", ""));
+        emailTextView.setText(sharedPreferences.getString("username", ""));*/
 
         // Handle theme selection
         themeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
