@@ -327,6 +327,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         lineChart.setVisibility(View.GONE);
                         break;
 
+                    case R.id.settings:
+                        Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                        startActivity(settingsIntent);
+                        Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
+                        break;
+
                     case R.id.exit:
                         Toast.makeText(getApplicationContext(), "Exit", Toast.LENGTH_SHORT).show();
                         finish();
