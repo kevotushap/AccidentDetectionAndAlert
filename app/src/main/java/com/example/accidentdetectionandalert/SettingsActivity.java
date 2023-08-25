@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private static final int PERMISSION_REQUEST_CODE = 123;
     private SharedPreferences sharedPreferences;
     private ImageView profileImageView;
     private TextView nameTextView;
@@ -34,7 +35,8 @@ public class SettingsActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         // Initialize views
-
+        profileImageView = findViewById(R.id.profile_image);
+        emailTextView = findViewById(R.id.email_text_view);
         themeRadioGroup = findViewById(R.id.radio_group_theme);
         notificationTextView = findViewById(R.id.notification_text_view);
         notificationsSwitch = findViewById(R.id.switch_notifications);
