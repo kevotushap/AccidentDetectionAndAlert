@@ -56,8 +56,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".SettingsActivity"
-            android:theme="@style/AppTheme"> <!-- Apply your AppCompat theme here -->
+            android:name=".SettingsActivity">
         </activity>
 
         <service
