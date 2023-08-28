@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Initialize the LineChart after setting the layout
         initLineChart();
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
         // Initialize the navigation header views
         NavigationView navigationView = findViewById(R.id.nav_view);
         /*View headerView = navigationView.getHeaderView(0);
