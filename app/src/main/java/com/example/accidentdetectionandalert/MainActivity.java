@@ -521,7 +521,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Start the AccelerometerService
         Intent i = new Intent(getApplicationContext(), AccelerometerService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(i);
+             startForegroundService(i);
         } else {
             startService(i);
         }
