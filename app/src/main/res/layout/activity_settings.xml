@@ -20,7 +20,7 @@
         app:titleMarginStart="160dp"
         app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
         app:titleTextColor="@android:color/white"
-        app:navigationIcon="@drawable/ic_arrow_back"
+
         app:layout_constraintTop_toTopOf="parent"/>
 
 
@@ -73,27 +73,30 @@
     </RadioGroup>
 
     <!-- Notification Settings -->
+
+    <!-- Sign Out Button -->
     <TextView
         android:id="@+id/notification_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="Enable Notifications"
-        app:layout_constraintTop_toBottomOf="@+id/radio_group_theme"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        app:layout_constraintHorizontal_bias="0.132"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group_theme" />
 
     <Switch
         android:id="@+id/switch_notifications"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:checked="true"
-        app:layout_constraintTop_toBottomOf="@+id/notification_text_view"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintHorizontal_bias="0.600"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radio_group_theme" />
 
-    <!-- Sign Out Button -->
     <Button
         android:id="@+id/btn_sign_out"
         android:layout_width="0dp"
