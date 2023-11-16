@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        // Set click listener for the profile image in toolbar
+        /*// Set click listener for the profile image in toolbar
         navProfileImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 // For example, open a Settings activity
                 openSettingsActivity();
             }
-        });
+        });*/
     }
 
     //function to open a Settings Activity
