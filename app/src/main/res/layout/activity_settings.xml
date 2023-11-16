@@ -40,12 +40,14 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/ic_profile"
+        android:layout_marginLeft="140dp"
+        android:src="@drawable/user"
         android:background="@drawable/circle_background"
-
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="Profile Image"
+        android:clickable="true"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/email_text_view"
