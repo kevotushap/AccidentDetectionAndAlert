@@ -20,8 +20,9 @@
         app:titleMarginStart="160dp"
         app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
         app:titleTextColor="@android:color/white"
-        app:navigationIcon="?android:attr/back"
+        app:navigationIcon="@drawable/ic_arrow_back"
         app:layout_constraintTop_toTopOf="parent"/>
+
 
     <!-- Profile Image -->
     <ImageView
