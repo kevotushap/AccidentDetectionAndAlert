@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -70,6 +71,12 @@ public class SettingsActivity extends AppCompatActivity {
             // Handle notification settings
             // Code for enabling/disabling notifications
         });
+
+        // Populate the language Spinner
+        String[] languageOptions = getResources().getStringArray(R.array.language_options);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languageOptions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSpinner.setAdapter(adapter);
 
         // Handle sign out
         signOutButton.setOnClickListener(new View.OnClickListener() {
