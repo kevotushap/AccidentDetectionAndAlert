@@ -20,5 +20,11 @@
     <string name="sending_notification_to_the_emergency_contact">SENDING NOTIFICATION TO THE EMERGENCY CONTACT</string>
     <string name="false_alarm">False Alarm</string>
     <string name="profile_image_description" />
+    <string-array name="language_options">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <!-- Add more languages as needed -->
+    </string-array>
 
 </resources>
