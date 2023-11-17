@@ -40,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
         notificationTextView = findViewById(R.id.notification_text_view);
         notificationsSwitch = findViewById(R.id.switch_notifications);
         Button signOutButton = findViewById(R.id.btn_sign_out);
+        languageSpinner = findViewById(R.id.language_spinner);
  
       /*  // Load and display user's profile image and name
         String profileImageUriString = sharedPreferences.getString("profileImageUri", null);
