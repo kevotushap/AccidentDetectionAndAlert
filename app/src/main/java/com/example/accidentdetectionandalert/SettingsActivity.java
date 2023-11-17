@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
     private RadioGroup themeRadioGroup;
     private TextView notificationTextView;
     private Switch notificationsSwitch;
+    private Spinner languageSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
