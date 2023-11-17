@@ -20,7 +20,7 @@
         app:titleMarginStart="160dp"
         app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
         app:titleTextColor="@android:color/white"
-
+        app:navigationIcon="@drawable/back_arrow"
         app:layout_constraintTop_toTopOf="parent"/>
 
 
@@ -97,7 +97,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/radio_group_theme" />
 
-    <Spinner
+    <!-- Spinner
         android:id="@+id/language_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" -->
 
     <Button
         android:id="@+id/btn_sign_out"
