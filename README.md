@@ -19,7 +19,7 @@ The **Accident Detection and Alert App** is an Android application designed to d
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/accident-detection-and-alert-app.git
+   git clone https://github.com/kevotushap/accident-detection-and-alert-app.git
    ```
 2. Open the project in Android Studio.
 3. Build and run the app on an emulator or physical device.
